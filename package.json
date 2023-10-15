@@ -1,0 +1,30 @@
+{
+  "name": "code-critic",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "prisma generate && npm run generate-demo-data",
+    "generate-demo-data": "node scripts/generate-demo-data.js"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/inter": "^5.0.12",
+    "@mui/icons-material": "^5.14.12",
+    "@mui/joy": "^5.0.0-beta.9",
+    "@mui/material": "^5.14.12",
+    "@prisma/client": "^5.4.2",
+    "jose": "^4.15.2",
+    "next": "13.5.4",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4",
+    "prisma": "^5.4.2"
+  }
+}

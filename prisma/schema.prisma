@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String  @id @default(uuid())
+  name        String
+  email       String  @unique
+  password    String
+  demoAccount Boolean @default(false)
+
+  profiles       MemberProfile[] @relation("member")
+  reportedIssues Issue[]         @relation("issue_reporter")
+  assignedIssues Issue[]         @relation("issue_assignee")
+}
+
+model Project {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  members MemberProfile[] @relation("member")
+  issues  Issue[]         @relation("issue")
+}
+
+model MemberProfile {
+  id        String  @id @default(uuid())
+  userId    String
+  projectId String
+  role      String?
+  isAdmin   Boolean @default(false)
+
+  user    User    @relation("member", fields: [userId], references: [id])
+  project Project @relation("member", fields: [projectId], references: [id])
+}
+
+model Issue {
+  id           String      @id @default(uuid())
+  title        String
+  description  String?
+  status       IssueStatus @default(open)
+  dateReported DateTime    @default(now())
+  dateResolved DateTime?
+  reporterId   String
+  assigneeId   String?
+  projectId    String
+
+  reporter User    @relation("issue_reporter", fields: [reporterId], references: [id])
+  assignee User?   @relation("issue_assignee", fields: [assigneeId], references: [id])
+  project  Project @relation("issue", fields: [projectId], references: [id])
+}
+
+enum IssueStatus {
+  open
+  closed
+}
