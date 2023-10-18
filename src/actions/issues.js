@@ -47,6 +47,9 @@ export async function reverseIssueStatus(issueId) {
   const issue = await prisma.issue.findUnique({ where: { id: issueId } });
   await prisma.issue.update({
     where: { id: issueId },
-    data: { status: issue.status === "open" ? "closed" : "open" },
+    data: {
+      status: issue.status === "open" ? "closed" : "open",
+      dateResolved: issue.status === "open" ? new Date() : null,
+    },
   });
 }
