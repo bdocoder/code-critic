@@ -1,15 +1,7 @@
 import prisma from "@/db";
 import { getUserId } from "@/utils/server";
-import { Add, Lock } from "@mui/icons-material";
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemDecorator,
-  ListSubheader,
-  Sheet,
-  Tooltip,
-} from "@mui/joy";
+import { LockClosedIcon, PlusIcon } from "@radix-ui/react-icons";
+import { Button, Text, Tooltip } from "@radix-ui/themes";
 import Link from "next/link";
 
 export default async function Sidebar() {
@@ -20,35 +12,29 @@ export default async function Sidebar() {
   });
 
   return (
-    <Sheet sx={{ minWidth: 280 }}>
-      <List>
-        <ListSubheader>Projects</ListSubheader>
-        {user.profiles.map(({ isAdmin, project }) => (
-          <ListItem key={project.id}>
-            <ListItemButton component={Link} href={`/projects/${project.id}`}>
-              <ListItemDecorator>
-                {isAdmin && (
-                  <Tooltip title="Admin" variant="outlined">
-                    <Lock />
-                  </Tooltip>
-                )}
-              </ListItemDecorator>
-
-              {project.title}
-            </ListItemButton>
-          </ListItem>
-        ))}
-        <ListItem>
-          <ListItemButton component={Link} href="/projects/create">
-            <ListItemDecorator>
-              <Add />
-            </ListItemDecorator>
-            Create
-          </ListItemButton>
-        </ListItem>
-
-        {/* TODO: add links to browse reported or assigned issues */}
-      </List>
-    </Sheet>
+    <aside className="min-w-[280px] bg-gray-3 px-8 py-3 flex flex-col space-y-4">
+      <Text className="uppercase" as="p" size="2" align="center">
+        Projects
+      </Text>
+      {user.profiles.map(({ isAdmin, project }) => (
+        <Link key={project.id} href={`/projects/${project.id}`} passHref>
+          <Button className="w-full" variant="ghost" size="4">
+            {isAdmin && (
+              <Tooltip content="Admin">
+                <LockClosedIcon />
+              </Tooltip>
+            )}
+            {project.title}
+          </Button>
+        </Link>
+      ))}
+      <Link href="/projects/create" passHref>
+        <Button className="w-full" variant="ghost" size="4">
+          <PlusIcon />
+          Create
+        </Button>
+      </Link>
+      {/* TODO: add links to browse reported or assigned issues */}
+    </aside>
   );
 }

@@ -1,52 +1,54 @@
-import { Button, Dropdown, Input, Menu, MenuButton, MenuItem } from "@mui/joy";
-import { demoLogin, login } from "@/actions/auth";
-import ClientForm from "@/components/ClientForm";
+import { login } from "@/actions/auth";
 import SubmitButton from "@/components/SubmitButton";
-import ActionButton from "@/components/ActionButton";
+import {
+  Button,
+  DropdownMenuContent,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  TextFieldInput,
+  TextFieldRoot,
+} from "@radix-ui/themes";
+import DemoLoginButton from "./DemoLoginButton";
+import AuthForm from "../AuthForm";
 
 export default function LoginPage() {
   return (
-    <ClientForm action={login}>
-      <Input name="email" type="email" placeholder="Email" required />
-      <Input name="password" type="password" placeholder="Password" required />
-      <SubmitButton>Login</SubmitButton>
-      <Dropdown>
-        <MenuButton
-          slots={{ root: Button }}
-          slotProps={{ root: { variant: "outlined" } }}
-        >
-          Login with a demo account
-        </MenuButton>
-        <Menu>
-          <ActionButton
-            action={async () => {
-              "use server";
-              return await demoLogin("hamada@gmail.com");
-            }}
-            component={MenuItem}
-          >
-            Hamada (a PM)
-          </ActionButton>
-          <ActionButton
-            action={async () => {
-              "use server";
-              return await demoLogin("omar@gmail.com");
-            }}
-            component={MenuItem}
-          >
-            Omar (a developer)
-          </ActionButton>
-          <ActionButton
-            action={async () => {
-              "use server";
-              return await demoLogin("ali@gmail.com");
-            }}
-            component={MenuItem}
-          >
-            Ali (a db admin)
-          </ActionButton>
-        </Menu>
-      </Dropdown>
-    </ClientForm>
+    <AuthForm title="Login to an existing account" action={login}>
+      <TextFieldRoot>
+        <TextFieldInput
+          name="email"
+          type="email"
+          placeholder="Email"
+          required
+        />
+      </TextFieldRoot>
+      <TextFieldRoot>
+        <TextFieldInput
+          name="password"
+          type="password"
+          placeholder="Password"
+          required
+        />
+      </TextFieldRoot>
+      <div className="flex justify-between space-x-2">
+        <SubmitButton className="flex-grow">Login</SubmitButton>
+        <DropdownMenuRoot>
+          <DropdownMenuTrigger>
+            <Button variant="soft">Use a demo account</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DemoLoginButton email="hamada@gmail.com">
+              Hamada (a PM)
+            </DemoLoginButton>
+            <DemoLoginButton email="omar@gmail.com">
+              Omar (a developer)
+            </DemoLoginButton>
+            <DemoLoginButton email="ali@gmail.com">
+              Ali (a db admin)
+            </DemoLoginButton>
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
+      </div>
+    </AuthForm>
   );
 }

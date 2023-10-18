@@ -1,9 +1,11 @@
 import "@fontsource/inter";
-import { CssBaseline, CssVarsProvider, Stack } from "@mui/joy";
-import Sidebar from "./Sidebar";
+import "tailwindcss/tailwind.css";
+import "@radix-ui/themes/styles.css";
+import "./theme-config.css";
+import { Theme } from "@radix-ui/themes";
 import Navbar from "./Navbar";
 import { getUserId } from "@/utils/server";
-import theme from "./theme";
+import Sidebar from "./Sidebar";
 
 export default function RootLayout({ children }) {
   const id = getUserId();
@@ -11,18 +13,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <CssVarsProvider defaultColorScheme="dark" theme={theme}>
-          <CssBaseline />
-          <Stack minHeight="100vh">
+        <Theme>
+          <div className="flex flex-wrap content-start min-h-screen bg-accent-1">
             <Navbar />
-            <Stack direction="row" flexGrow={1}>
-              {id && <Sidebar />}
-              <Stack component="main" flexGrow={1} useFlexGap>
-                {children}
-              </Stack>
-            </Stack>
-          </Stack>
-        </CssVarsProvider>
+            {id && <Sidebar />}
+            <main className="flex flex-col flex-grow min-h-[calc(100vh-52px)]">
+              {children}
+            </main>
+          </div>
+        </Theme>
       </body>
     </html>
   );

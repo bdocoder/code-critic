@@ -1,22 +1,22 @@
 "use client";
 
 import { experimental_useFormState as useFormState } from "react-dom";
-import Alert from "@mui/joy/Alert";
-import Card from "@mui/joy/Card";
-import Stack from "@mui/joy/Stack";
+import { CalloutRoot, CalloutText } from "@radix-ui/themes";
 
 /**
- * @param {{action: () => Promise, children: React.ReactNode}} _
+ * @param {{action: () => Promise} & React.HTMLProps<HTMLFormElement>} _
  */
-export default function ClientForm({ action, children }) {
+export default function ClientForm({ action, children, ...props }) {
   const [state, formAction] = useFormState(action, { error: null });
 
   return (
-    <Card sx={{ margin: "auto" }}>
-      <Stack spacing={2} useFlexGap component="form" action={formAction}>
-        {state?.error && <Alert color="danger">{state.error}</Alert>}
-        {children}
-      </Stack>
-    </Card>
+    <form action={formAction} {...props}>
+      {state?.error && (
+        <CalloutRoot color="red">
+          <CalloutText>{state.error}</CalloutText>
+        </CalloutRoot>
+      )}
+      {children}
+    </form>
   );
 }

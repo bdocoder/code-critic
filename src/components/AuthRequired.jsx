@@ -1,9 +1,9 @@
-import { Typography } from "@mui/joy";
+import { Text } from "@radix-ui/themes";
 
 export default function AuthRequired() {
   return (
-    <Typography m="auto" level="title-lg" color="danger">
+    <Text size="4" color="red" m="auto">
       You should be authenticated to be able to view this page
-    </Typography>
+    </Text>
   );
 }

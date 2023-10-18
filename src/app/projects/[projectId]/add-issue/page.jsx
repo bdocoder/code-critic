@@ -4,7 +4,16 @@ import ClientForm from "@/components/ClientForm";
 import SubmitButton from "@/components/SubmitButton";
 import prisma from "@/db";
 import { getUserId } from "@/utils/server";
-import { Input, Option, Select, Textarea } from "@mui/joy";
+import {
+  Heading,
+  SelectContent,
+  SelectItem,
+  SelectRoot,
+  SelectTrigger,
+  TextArea,
+  TextFieldInput,
+  TextFieldRoot,
+} from "@radix-ui/themes";
 
 export default async function AddIssue({ params: { projectId } }) {
   const id = getUserId();
@@ -18,24 +27,35 @@ export default async function AddIssue({ params: { projectId } }) {
   });
 
   return (
-    <ClientForm action={createIssue}>
-      <Input name="title" placeholder="Title" />
-      <Textarea
-        name="description"
-        placeholder="Description (optional)"
-        minRows={3}
-      />
-      <input name="projectId" value={projectId} type="hidden" />
-      {profile.isAdmin && (
-        <Select name="assigneeId" placeholder="Assignee" required>
-          {profile.project.members.map(({ user, role }) => (
-            <Option key={user.id} value={user.id}>
-              {user.name} {role && `[${role}]`}
-            </Option>
-          ))}
-        </Select>
-      )}
-      <SubmitButton>Create</SubmitButton>
-    </ClientForm>
+    <div className="mx-auto mt-4 text-center">
+      <Heading size="4" mb="3">
+        Create an issue
+      </Heading>
+      <ClientForm action={createIssue} className="flex flex-col space-y-2">
+        <TextFieldRoot>
+          <TextFieldInput name="title" placeholder="Title" required />
+        </TextFieldRoot>
+
+        <TextArea
+          name="description"
+          placeholder="Description (optional)"
+          rows={3}
+        />
+        <input name="projectId" value={projectId} type="hidden" />
+        {profile.isAdmin && (
+          <SelectRoot name="assigneeId">
+            <SelectTrigger placeholder="Assignee" />
+            <SelectContent>
+              {profile.project.members.map(({ user, role }) => (
+                <SelectItem key={user.id} value={user.id}>
+                  {user.name} {role && `[${role}]`}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </SelectRoot>
+        )}
+        <SubmitButton>Create</SubmitButton>
+      </ClientForm>
+    </div>
   );
 }

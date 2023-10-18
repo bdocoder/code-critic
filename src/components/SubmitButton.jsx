@@ -1,12 +1,15 @@
 "use client";
 
-import { Button } from "@mui/joy";
+import { Button } from "@radix-ui/themes";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 
+// /**
+//  * @param {import("@radix-ui/themes/dist/esm/components/button.props") & React.HTMLProps<HTMLButtonElement>} props
+//  */
 /**
- * @param {import("@mui/joy").ButtonProps} props
+ * @param {import("@radix-ui/themes/dist/esm/components/button").ButtonProps} props
  */
 export default function SubmitButton(props) {
   const { pending } = useFormStatus();
-  return <Button type="submit" loading={pending} {...props} />;
+  return <Button disabled={pending} {...props} />;
 }

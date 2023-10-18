@@ -1,5 +1,5 @@
 import prisma from "@/db";
-import { Container, Divider, Stack, Typography } from "@mui/joy";
+import { Heading } from "@radix-ui/themes";
 
 export default async function ProjectLayout({
   params: { projectId },
@@ -10,19 +10,11 @@ export default async function ProjectLayout({
   });
 
   return (
-    <Container>
-      <Stack px={3} py={2} spacing={3.5} useFlexGap>
-        <div>
-          <Typography level="h2">{project.title}</Typography>
-          {project.description && (
-            <Typography level="body-lg" mt={1}>
-              {project.description}
-            </Typography>
-          )}
-        </div>
-        <Divider />
-        {children}
-      </Stack>
-    </Container>
+    <div className="container flex flex-col flex-grow px-8 py-6 mx-auto">
+      <Heading as="h1" size="7">
+        {project.title}
+      </Heading>
+      {children}
+    </div>
   );
 }

@@ -1,19 +1,19 @@
 import { getUserId } from "@/utils/server";
-import { Container, Typography } from "@mui/joy";
+import { Heading, Text } from "@radix-ui/themes";
 
 export default function Home() {
   const id = getUserId();
 
   return (
-    <Container sx={{ margin: "auto", textAlign: "center" }}>
-      <Typography level="h2" mb={1}>
+    <div className="m-auto text-center">
+      <Heading size="7" mb="2">
         Hi there!
-      </Typography>
-      <Typography level="title-md">
+      </Heading>
+      <Text as="p" size="4">
         {id
           ? "Use the sidebar to navigate the projects you are a member of"
-          : "Use the buttons above to authenticate or login with a demo account"}
-      </Typography>
-    </Container>
+          : "Use the navbar to authenticate or login with a demo account"}
+      </Text>
+    </div>
   );
 }
