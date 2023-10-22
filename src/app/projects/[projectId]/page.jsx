@@ -2,6 +2,7 @@ import prisma from "@/db";
 import { getUserId } from "@/utils/server";
 import {
   ArrowRightIcon,
+  DotsVerticalIcon,
   LockClosedIcon,
   PlusIcon,
 } from "@radix-ui/react-icons";
@@ -9,6 +10,9 @@ import {
   Badge,
   Button,
   Card,
+  DropdownMenuContent,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
   Heading,
   IconButton,
   TableCell,
@@ -21,6 +25,8 @@ import {
   Tooltip,
 } from "@radix-ui/themes";
 import Link from "next/link";
+import ActionDropdownItem from "@/components/ActionDropdownItem";
+import { removeMember, setAdminPermission } from "@/actions/projects";
 
 export default async function ProjectInfo({ params: { projectId } }) {
   const id = getUserId();
@@ -31,6 +37,10 @@ export default async function ProjectInfo({ params: { projectId } }) {
       members: { include: { user: true } },
     },
   });
+
+  const isCurrentUserAdmin = project.members.find(
+    ({ userId }) => userId === id
+  )?.isAdmin;
 
   return (
     <>
@@ -103,6 +113,36 @@ export default async function ProjectInfo({ params: { projectId } }) {
                   </Tooltip>
                 )}
                 {user.name} {role && `[${role}]`} {user.id === id && "(You)"}
+                {isCurrentUserAdmin && id !== user.id && (
+                  <DropdownMenuRoot>
+                    <DropdownMenuTrigger>
+                      <IconButton className="ml-auto" variant="ghost">
+                        <DotsVerticalIcon width={16} height={16} />
+                      </IconButton>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <ActionDropdownItem
+                        action={setAdminPermission.bind(null, {
+                          userId: user.id,
+                          projectId,
+                          setTo: !isAdmin,
+                        })}
+                      >
+                        {isAdmin ? "Remove admin permission" : "Make admin"}
+                      </ActionDropdownItem>
+                      <ActionDropdownItem
+                        action={removeMember.bind(null, {
+                          userId: user.id,
+                          projectId,
+                        })}
+                        color="red"
+                      >
+                        Remove
+                      </ActionDropdownItem>
+                      {/* TODO: find a way to change user roles without removing them */}
+                    </DropdownMenuContent>
+                  </DropdownMenuRoot>
+                )}
               </Text>
             ))}
             <Link href={`/projects/${projectId}/add-member`} passHref>
@@ -114,8 +154,6 @@ export default async function ProjectInfo({ params: { projectId } }) {
           </Card>
         </div>
       </div>
-      {/* TODO: add user controls */}
-      {/* e.g. give admin permissions or remove from the project */}
     </>
   );
 }

@@ -51,3 +51,25 @@ export async function addMember(_, data) {
   revalidatePath(`/projects/${projectId}`);
   redirect(`/projects/${projectId}`);
 }
+
+/**
+ * @param {{userId: string, projectId: string, setTo: boolean}} data
+ */
+export async function setAdminPermission({ userId, projectId, setTo }) {
+  // 'updateMany' is because 'update' requires an id
+  await prisma.memberProfile.updateMany({
+    where: { userId, projectId },
+    data: { isAdmin: setTo },
+  });
+  revalidatePath(`/projects/${projectId}`);
+}
+
+/**
+ * @param {{userId: string, projectId: string}} data
+ */
+export async function removeMember({ userId, projectId }) {
+  // for 'deleteMany', see the previous comment
+  await prisma.memberProfile.deleteMany({ where: { userId, projectId } });
+  // TODO: find assigned issues and remove the assignee
+  revalidatePath(`/projects/${projectId}`);
+}
