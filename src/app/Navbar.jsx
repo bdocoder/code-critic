@@ -1,15 +1,12 @@
 import prisma from "@/db";
 import { getUserId } from "@/utils/server";
 import {
-  Avatar,
   Button,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRoot,
   DropdownMenuTrigger,
   Heading,
-  IconButton,
 } from "@radix-ui/themes";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
