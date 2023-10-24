@@ -70,6 +70,9 @@ export async function setAdminPermission({ userId, projectId, setTo }) {
 export async function removeMember({ userId, projectId }) {
   // for 'deleteMany', see the previous comment
   await prisma.memberProfile.deleteMany({ where: { userId, projectId } });
-  // TODO: find assigned issues and remove the assignee
-  revalidatePath(`/projects/${projectId}`);
+  await prisma.issue.updateMany({
+    where: { AND: [{ assigneeId: userId }, { projectId }] },
+    data: { assigneeId: null },
+  });
+  revalidatePath(`/projects/${projectId}`, "layout");
 }
