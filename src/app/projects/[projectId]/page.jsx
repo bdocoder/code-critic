@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
   Heading,
   IconButton,
+  TableBody,
   TableCell,
   TableColumnHeaderCell,
   TableHeader,
@@ -61,27 +62,29 @@ export default async function ProjectInfo({ params: { projectId } }) {
                 </TableRow>
               </TableHeader>
 
-              {project.issues.map(({ id, title, status, dateReported }) => (
-                <TableRow key={id} align="center">
-                  <TableRowHeaderCell>{title}</TableRowHeaderCell>
-                  <TableCell>
-                    <Badge
-                      color={status === "open" ? "yellow" : "green"}
-                      className="capitalize"
-                    >
-                      {status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{dateReported.toDateString()}</TableCell>
-                  <TableCell>
-                    <Link href={`/projects/${projectId}/${id}`}>
-                      <IconButton variant="ghost">
-                        <ArrowRightIcon />
-                      </IconButton>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
+              <TableBody>
+                {project.issues.map(({ id, title, status, dateReported }) => (
+                  <TableRow key={id} align="center">
+                    <TableRowHeaderCell>{title}</TableRowHeaderCell>
+                    <TableCell>
+                      <Badge
+                        color={status === "open" ? "yellow" : "green"}
+                        className="capitalize"
+                      >
+                        {status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{dateReported.toDateString()}</TableCell>
+                    <TableCell>
+                      <Link href={`/projects/${projectId}/${id}`}>
+                        <IconButton variant="ghost">
+                          <ArrowRightIcon />
+                        </IconButton>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </TableRoot>
           ) : (
             <Text size="4">None so far.. </Text>
