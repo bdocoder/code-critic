@@ -15,7 +15,7 @@ async function run() {
     },
   });
   await prisma.memberProfile.deleteMany({ where: { userId: { in: demoIds } } });
-  // TODO: fix projects with no members.
+  await prisma.project.deleteMany({ where: { members: { none: {} } } });
   await prisma.user.deleteMany({ where: { id: { in: demoIds } } });
 
   // DEMO DATA CREATION
