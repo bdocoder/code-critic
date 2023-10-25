@@ -34,7 +34,25 @@ export default async function Sidebar() {
           Create
         </Button>
       </Link>
-      {/* TODO: add links to browse reported or assigned issues */}
+
+      {/* for spacing purposes */}
+      <div></div>
+
+      <Text className="uppercase" as="p" size="2" align="center">
+        Issues
+      </Text>
+
+      {/* TODO: add the count of open issues */}
+      <Link href="/issues/assigned" passHref>
+        <Button className="w-full" variant="ghost" size="4">
+          Assigned to me
+        </Button>
+      </Link>
+      <Link href="/issues/reported" passHref>
+        <Button className="w-full" variant="ghost" size="4">
+          Reported by me
+        </Button>
+      </Link>
     </aside>
   );
 }
