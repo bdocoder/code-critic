@@ -14,10 +14,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Theme>
-          <div className="flex flex-wrap content-start min-h-screen bg-accent-1">
+          <div className="min-h-screen bg-accent-1 grid grid-cols-[240px_1fr] grid-rows-[52px_1fr]">
             <Navbar />
             {id && <Sidebar />}
-            <main className="flex flex-col flex-grow min-h-[calc(100vh-52px)]">
+            <main className={`flex flex-col${id ? "" : " col-span-2"}`}>
               {children}
             </main>
           </div>

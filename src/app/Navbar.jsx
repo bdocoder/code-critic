@@ -16,7 +16,7 @@ export default async function Navbar() {
   const user = id ? await prisma.user.findUnique({ where: { id } }) : null;
 
   return (
-    <header className="bg-accent-3 h-[52px] flex px-3 py-2 items-center w-full space-x-2">
+    <header className="flex items-center w-full col-span-2 px-3 py-2 space-x-2 bg-accent-3">
       <Heading size="5">Code Critic</Heading>
       <div style={{ flexGrow: 1 }}></div>
 
