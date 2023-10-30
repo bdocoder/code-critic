@@ -14,7 +14,7 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
       await prisma.memberProfile.findFirst({
         where: { AND: [{ projectId }, { userId: id }] },
       })
-    ).isAdmin;
+    )?.isAdmin;
 
   const issue = await prisma.issue.findUnique({
     where: { id: issueId },
