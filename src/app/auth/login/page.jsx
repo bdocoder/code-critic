@@ -46,6 +46,9 @@ export default function LoginPage() {
             <DemoLoginButton email="ali@gmail.com">
               Ali (a db admin)
             </DemoLoginButton>
+            <DemoLoginButton email="essam@gmail.com">
+              Essam (an ordinary user)
+            </DemoLoginButton>
           </DropdownMenuContent>
         </DropdownMenuRoot>
       </div>
