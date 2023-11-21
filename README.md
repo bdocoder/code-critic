@@ -1,4 +1,4 @@
-This is a simple issue tracker app, made with NextJS & Joy UI.
+This is a simple issue tracker app, made with NextJS & Radix UI.
 
 ## Getting Started
 
