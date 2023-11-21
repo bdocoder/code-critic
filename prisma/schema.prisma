@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id          String  @id @default(uuid())
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   email       String  @unique
   password    String
@@ -20,7 +20,7 @@ model User {
 }
 
 model Project {
-  id          String  @id @default(uuid())
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
 
@@ -29,9 +29,9 @@ model Project {
 }
 
 model MemberProfile {
-  id        String  @id @default(uuid())
-  userId    String
-  projectId String
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String  @db.ObjectId
+  projectId String  @db.ObjectId
   role      String?
   isAdmin   Boolean @default(false)
 
@@ -40,15 +40,15 @@ model MemberProfile {
 }
 
 model Issue {
-  id           String      @id @default(uuid())
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   description  String?
   status       IssueStatus @default(open)
   dateReported DateTime    @default(now())
   dateResolved DateTime?
-  reporterId   String
-  assigneeId   String?
-  projectId    String
+  reporterId   String      @db.ObjectId
+  assigneeId   String?     @db.ObjectId
+  projectId    String      @db.ObjectId
 
   reporter User    @relation("issue_reporter", fields: [reporterId], references: [id])
   assignee User?   @relation("issue_assignee", fields: [assigneeId], references: [id])
