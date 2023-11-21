@@ -6,6 +6,7 @@ import { Theme } from "@radix-ui/themes";
 import Navbar from "./Navbar";
 import { getUserId } from "@/utils/server";
 import Sidebar from "./Sidebar";
+import DTLogger from "@/components/DTLogger";
 
 export default function RootLayout({ children }) {
   const id = getUserId();
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <DTLogger />
         <Theme>
           <div className="min-h-screen bg-accent-1 grid grid-cols-[240px_1fr] grid-rows-[52px_1fr]">
             <Navbar />
