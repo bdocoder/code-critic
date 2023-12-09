@@ -12,7 +12,7 @@ export default async function Sidebar() {
   });
 
   return (
-    <aside className="flex flex-col px-8 py-3 space-y-4 bg-gray-3">
+    <aside className="flex flex-col px-8 py-3 space-y-4 bg-accent-2">
       <Text className="uppercase" as="p" size="2" align="center">
         Projects
       </Text>
