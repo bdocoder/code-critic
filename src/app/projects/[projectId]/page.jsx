@@ -28,6 +28,10 @@ import {
 import Link from "next/link";
 import ActionDropdownItem from "@/components/ActionDropdownItem";
 import { removeMember, setAdminPermission } from "@/actions/projects";
+import DialogWrapper, {
+  DropdownDialogToggle,
+} from "@/components/DialogWrapper";
+import ChangeRoleDialog from "./ChangeRoleDialog";
 
 export default async function ProjectInfo({ params: { projectId } }) {
   const id = getUserId();
@@ -117,34 +121,45 @@ export default async function ProjectInfo({ params: { projectId } }) {
                 )}
                 {user.name} {role && `[${role}]`} {user.id === id && "(You)"}
                 {isCurrentUserAdmin && id !== user.id && (
-                  <DropdownMenuRoot>
-                    <DropdownMenuTrigger>
-                      <IconButton className="ml-auto" variant="ghost">
-                        <DotsVerticalIcon width={16} height={16} />
-                      </IconButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <ActionDropdownItem
-                        action={setAdminPermission.bind(null, {
-                          userId: user.id,
-                          projectId,
-                          setTo: !isAdmin,
-                        })}
-                      >
-                        {isAdmin ? "Remove admin permission" : "Make admin"}
-                      </ActionDropdownItem>
-                      <ActionDropdownItem
-                        action={removeMember.bind(null, {
-                          userId: user.id,
-                          projectId,
-                        })}
-                        color="red"
-                      >
-                        Remove
-                      </ActionDropdownItem>
-                      {/* TODO: find a way to change user roles without removing them */}
-                    </DropdownMenuContent>
-                  </DropdownMenuRoot>
+                  <DialogWrapper
+                    dialog={
+                      <ChangeRoleDialog
+                        projectId={projectId}
+                        name={user.name}
+                        userId={user.id}
+                        oldRole={role}
+                      />
+                    }
+                  >
+                    <DropdownMenuRoot>
+                      <DropdownMenuTrigger>
+                        <IconButton className="ml-auto" variant="ghost">
+                          <DotsVerticalIcon width={16} height={16} />
+                        </IconButton>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <ActionDropdownItem
+                          action={setAdminPermission.bind(null, {
+                            userId: user.id,
+                            projectId,
+                            setTo: !isAdmin,
+                          })}
+                        >
+                          {isAdmin ? "Remove admin permission" : "Make admin"}
+                        </ActionDropdownItem>
+                        <DropdownDialogToggle>Change role</DropdownDialogToggle>
+                        <ActionDropdownItem
+                          action={removeMember.bind(null, {
+                            userId: user.id,
+                            projectId,
+                          })}
+                          color="red"
+                        >
+                          Remove
+                        </ActionDropdownItem>
+                      </DropdownMenuContent>
+                    </DropdownMenuRoot>
+                  </DialogWrapper>
                 )}
               </Text>
             ))}

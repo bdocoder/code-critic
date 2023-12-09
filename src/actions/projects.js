@@ -76,3 +76,18 @@ export async function removeMember({ userId, projectId }) {
   });
   revalidatePath(`/projects/${projectId}`, "layout");
 }
+
+/**
+ * @param {Record<'userId' | 'projectId' | 'oldRole' | 'newRole', string>} p0
+ * @param {FormData} data
+ */
+export async function changeRole({ userId, projectId, oldRole, newRole }) {
+  if (oldRole === newRole)
+    return { error: "New role can't be the same as old role!" };
+
+  await prisma.memberProfile.updateMany({
+    where: { AND: [{ userId }, { projectId }] },
+    data: { role: newRole },
+  });
+  revalidatePath(`/projects/${projectId}`, "layout");
+}
