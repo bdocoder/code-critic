@@ -21,17 +21,15 @@ export default async function Navbar() {
       <div style={{ flexGrow: 1 }}></div>
 
       {user ? (
-        <>
-          <DropdownMenuRoot>
-            <DropdownMenuTrigger>
-              <Button variant="ghost">{user.name.charAt(0)}</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
-              <LogoutButton />
-            </DropdownMenuContent>
-          </DropdownMenuRoot>
-        </>
+        <DropdownMenuRoot>
+          <DropdownMenuTrigger>
+            <Button variant="ghost">{user.name.charAt(0)}</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+            <LogoutButton />
+          </DropdownMenuContent>
+        </DropdownMenuRoot>
       ) : (
         <>
           <Link passHref href="/auth/register">
