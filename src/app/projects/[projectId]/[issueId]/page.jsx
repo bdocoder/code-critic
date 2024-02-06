@@ -80,7 +80,7 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
             </Heading>
             <Text as="p" size="4">
               {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
-                issue.dateReported
+                issue.dateReported,
               )}
             </Text>
           </div>
@@ -103,7 +103,7 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
                 </Heading>
                 <Text as="p" size="4">
                   {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
-                    issue.dateResolved
+                    issue.dateResolved,
                   )}
                 </Text>
               </>

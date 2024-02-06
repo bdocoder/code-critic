@@ -10,7 +10,7 @@ import { useLayoutEffect } from "react";
 export default function DTLogger() {
   useLayoutEffect(() => {
     console.log(
-      "Check out the README.md file at https://github.com/bdocoder/code-critic"
+      "Check out the README.md file at https://github.com/bdocoder/code-critic",
     );
   }, []);
   return null;

@@ -39,7 +39,7 @@ export default function IssueList({ issues, title }) {
                 <Text>{description}</Text>
               </Card>
             </Link>
-          )
+          ),
         )}
       </div>
     </div>

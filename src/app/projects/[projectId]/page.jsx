@@ -44,7 +44,7 @@ export default async function ProjectInfo({ params: { projectId } }) {
   });
 
   const isCurrentUserAdmin = project.members.find(
-    ({ userId }) => userId === id
+    ({ userId }) => userId === id,
   )?.isAdmin;
 
   return (
