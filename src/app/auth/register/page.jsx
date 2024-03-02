@@ -1,11 +1,11 @@
 import { register } from "@/actions/auth";
-import ClientForm from "../AuthForm";
+import AuthForm from "../AuthForm";
 import SubmitButton from "@/components/SubmitButton";
 import { TextFieldInput, TextFieldRoot } from "@radix-ui/themes";
 
 export default function RegisterPage() {
   return (
-    <ClientForm action={register} title="Create a new account">
+    <AuthForm action={register} title="Create a new account">
       <TextFieldRoot>
         <TextFieldInput name="name" placeholder="Name" required />
       </TextFieldRoot>
@@ -26,6 +26,6 @@ export default function RegisterPage() {
         />
       </TextFieldRoot>
       <SubmitButton>Register</SubmitButton>
-    </ClientForm>
+    </AuthForm>
   );
 }
