@@ -1,7 +1,7 @@
 "use server";
 
+import { auth } from "@/auth";
 import prisma from "@/db";
-import { getUserId } from "@/utils/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -9,7 +9,8 @@ import { redirect } from "next/navigation";
  * @param {FormData} data
  */
 export async function createIssue(_, data) {
-  const reporterId = getUserId();
+  const session = await auth();
+  const reporterId = session.user.id;
 
   const title = data.get("title");
   const description = data.get("description") || undefined;

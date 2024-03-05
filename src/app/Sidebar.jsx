@@ -1,11 +1,12 @@
+import { auth } from "@/auth";
 import prisma from "@/db";
-import { getUserId } from "@/utils/server";
 import { LockClosedIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Button, Text, Tooltip } from "@radix-ui/themes";
 import Link from "next/link";
 
 export default async function Sidebar() {
-  const id = getUserId();
+  const session = await auth();
+  const id = session.user.id;
   const user = await prisma.user.findUnique({
     where: { id },
     include: { profiles: { include: { project: true } } },

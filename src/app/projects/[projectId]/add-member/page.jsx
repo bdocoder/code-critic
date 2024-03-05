@@ -1,14 +1,13 @@
 import { addMember } from "@/actions/projects";
-import AuthRequired from "@/components/AuthRequired";
+import { auth } from "@/auth";
 import ClientForm from "@/components/ClientForm";
 import SubmitButton from "@/components/SubmitButton";
 import prisma from "@/db";
-import { getUserId } from "@/utils/server";
 import { Heading, Text, TextFieldInput, TextFieldRoot } from "@radix-ui/themes";
 
 export default async function AddMember({ params: { projectId } }) {
-  const id = getUserId();
-  if (!id) return <AuthRequired />;
+  const session = await auth();
+  const id = session.user.id;
 
   const { isAdmin } = await prisma.memberProfile.findFirst({
     where: {

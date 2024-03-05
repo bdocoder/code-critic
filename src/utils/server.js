@@ -1,9 +1,3 @@
-import { headers } from "next/headers";
-
-export function getUserId() {
-  return headers().get("x-user-id");
-}
-
 /**
  * @param {string} key
  */

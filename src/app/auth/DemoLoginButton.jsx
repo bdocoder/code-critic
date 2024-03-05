@@ -1,6 +1,6 @@
 "use client";
 
-import { demoLogin } from "@/actions/auth";
+import { loginWithDemoAccount } from "@/actions/auth";
 import { DropdownMenuItem } from "@radix-ui/themes";
 import { useTransition } from "react";
 
@@ -10,7 +10,11 @@ export default function DemoLoginButton({ email, children }) {
   return (
     <DropdownMenuItem
       disabled={pending}
-      onClick={() => startTransition(() => demoLogin(email))}
+      onClick={() => {
+        startTransition(async () => {
+          await loginWithDemoAccount(email);
+        });
+      }}
     >
       {children}
     </DropdownMenuItem>

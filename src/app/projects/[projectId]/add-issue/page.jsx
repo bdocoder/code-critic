@@ -1,9 +1,8 @@
 import { createIssue } from "@/actions/issues";
-import AuthRequired from "@/components/AuthRequired";
+import { auth } from "@/auth";
 import ClientForm from "@/components/ClientForm";
 import SubmitButton from "@/components/SubmitButton";
 import prisma from "@/db";
-import { getUserId } from "@/utils/server";
 import {
   Heading,
   SelectContent,
@@ -16,8 +15,8 @@ import {
 } from "@radix-ui/themes";
 
 export default async function AddIssue({ params: { projectId } }) {
-  const id = getUserId();
-  if (!id) return <AuthRequired />;
+  const session = await auth();
+  const id = session.user.id;
 
   const profile = await prisma.memberProfile.findFirst({
     where: { AND: [{ userId: id }, { projectId }] },

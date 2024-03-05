@@ -1,5 +1,4 @@
 import prisma from "@/db";
-import { getUserId } from "@/utils/server";
 import {
   ArrowRightIcon,
   DotsVerticalIcon,
@@ -32,9 +31,11 @@ import DialogWrapper, {
   DropdownDialogToggle,
 } from "@/components/DialogWrapper";
 import ChangeRoleDialog from "./ChangeRoleDialog";
+import { auth } from "@/auth";
 
 export default async function ProjectInfo({ params: { projectId } }) {
-  const id = getUserId();
+  const session = await auth();
+  const id = session.user.id;
   const project = await prisma.project.findUnique({
     where: { id: projectId },
     include: {
@@ -44,7 +45,7 @@ export default async function ProjectInfo({ params: { projectId } }) {
   });
 
   const isCurrentUserAdmin = project.members.find(
-    ({ userId }) => userId === id,
+    ({ userId }) => userId === id
   )?.isAdmin;
 
   return (

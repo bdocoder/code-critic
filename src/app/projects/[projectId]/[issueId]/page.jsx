@@ -1,13 +1,14 @@
 import { deleteIssue, reverseIssueStatus } from "@/actions/issues";
 import ActionButton from "@/components/ActionButton";
 import prisma from "@/db";
-import { getUserId } from "@/utils/server";
 import { Button, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import IssueHeader from "./IssueHeader";
+import { auth } from "@/auth";
 
 export default async function IssueInfo({ params: { projectId, issueId } }) {
-  const id = getUserId();
+  const session = await auth();
+  const id = session.user.id;
   const isAdmin =
     id &&
     (
@@ -80,7 +81,7 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
             </Heading>
             <Text as="p" size="4">
               {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
-                issue.dateReported,
+                issue.dateReported
               )}
             </Text>
           </div>
@@ -103,7 +104,7 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
                 </Heading>
                 <Text as="p" size="4">
                   {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
-                    issue.dateResolved,
+                    issue.dateResolved
                   )}
                 </Text>
               </>

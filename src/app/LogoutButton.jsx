@@ -2,11 +2,9 @@
 
 import { logout } from "@/actions/auth";
 import { DropdownMenuItem } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 export default function LogoutButton() {
-  const { refresh } = useRouter();
   const [pending, startTransition] = useTransition();
 
   return (
@@ -16,7 +14,6 @@ export default function LogoutButton() {
       onClick={() => {
         startTransition(async () => {
           await logout();
-          refresh();
         });
       }}
     >
