@@ -13,19 +13,14 @@ export async function createProject(_, data) {
   const id = session.user.id;
   const title = data.get("title");
   const description = data.get("description") || undefined;
-  try {
-    const project = await prisma.project.create({
-      data: {
-        title,
-        description,
-        members: { create: { userId: id, isAdmin: true } },
-      },
-    });
-    redirect(`/projects/${project.id}`);
-  } catch (e) {
-    console.error(e);
-    return { error: "An error occurred" };
-  }
+  const project = await prisma.project.create({
+    data: {
+      title,
+      description,
+      members: { create: { userId: id, isAdmin: true } },
+    },
+  });
+  redirect(`/projects/${project.id}`);
 }
 
 /**
