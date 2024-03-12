@@ -1,29 +1,18 @@
 "use client";
 
 import { DropdownMenuItem } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 /**
- * @param {{action: () => Promise<any>, reload: boolean} & import("@radix-ui/themes/dist/esm/components/dropdown-menu").DropdownMenuItemProps} props
+ * @param {{action: () => Promise<any>} & import("@radix-ui/themes/dist/esm/components/dropdown-menu").DropdownMenuItemProps} props
  */
-export default function ActionDropdownItem({
-  action,
-  reload = true,
-  ...props
-}) {
-  const { refresh } = useRouter();
+export default function ActionDropdownItem({ action, ...props }) {
   const [pending, startTransition] = useTransition();
 
   return (
     <DropdownMenuItem
       disabled={pending}
-      onClick={() =>
-        startTransition(async () => {
-          await action();
-          refresh();
-        })
-      }
+      onClick={() => startTransition(action)}
       {...props}
     />
   );

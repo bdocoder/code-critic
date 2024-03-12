@@ -13,7 +13,6 @@ import {
   TextFieldInput,
   TextFieldRoot,
 } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
 /**
@@ -22,7 +21,6 @@ import { useContext } from "react";
  */
 export default function ChangeRoleDialog({ name, userId, projectId, oldRole }) {
   const { setOpen } = useContext(DialogWrapperContext);
-  const { refresh } = useRouter();
 
   return (
     <DialogContent>
@@ -37,7 +35,6 @@ export default function ChangeRoleDialog({ name, userId, projectId, oldRole }) {
             newRole: data.get("newRole"),
           });
           if (result) return result; // in case there is an error
-          refresh();
           setOpen(false);
         }}
         className="flex flex-col space-y-3"
