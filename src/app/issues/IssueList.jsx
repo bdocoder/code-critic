@@ -1,4 +1,11 @@
-import { Badge, Card, Heading, Text } from "@radix-ui/themes";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import Link from "next/link";
 
 /**
@@ -8,8 +15,8 @@ import Link from "next/link";
 export default function IssueList({ issues, title }) {
   return (
     <div className="px-8 py-6">
-      <Heading mb="6">{title}</Heading>
-      {issues.length === 0 && <Text size="4">None so far.. </Text>}
+      <h1 className="mb-6">{title}</h1>
+      {issues.length === 0 && <p className="text-lg">None so far.. </p>}
       <div className="flex flex-col space-y-4 max-w-max">
         {issues.map(
           ({
@@ -22,24 +29,26 @@ export default function IssueList({ issues, title }) {
           }) => (
             <Link key={id} href={`/projects/${projectId}/${id}`} passHref>
               <Card>
-                <div className="flex items-center space-x-3">
-                  <Heading size="4">{issueTitle}</Heading>
+                <CardHeader>
+                  <CardTitle>{issueTitle}</CardTitle>
+                </CardHeader>
+                {description && <CardContent>{description}</CardContent>}
+                <CardFooter>
                   <Badge
-                    color={status === "open" ? "yellow" : "green"}
+                    variant={status === "open" ? "destructive" : "outline"}
                     className="capitalize"
                   >
                     {status}
                   </Badge>
                   {status === "open" && (
-                    <Text as="span" size="2">
+                    <span className="ml-1 text-sm">
                       since {dateReported.toDateString()}
-                    </Text>
+                    </span>
                   )}
-                </div>
-                <Text>{description}</Text>
+                </CardFooter>
               </Card>
             </Link>
-          ),
+          )
         )}
       </div>
     </div>

@@ -4,15 +4,14 @@ import { changeRole } from "@/actions/projects";
 import ClientForm from "@/components/ClientForm";
 import { DialogWrapperContext } from "@/components/DialogWrapper";
 import SubmitButton from "@/components/SubmitButton";
+import { Button } from "@/components/ui/button";
 import {
-  Button,
   DialogClose,
   DialogContent,
   DialogDescription,
   DialogTitle,
-  TextFieldInput,
-  TextFieldRoot,
-} from "@radix-ui/themes";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { useContext } from "react";
 
 /**
@@ -25,7 +24,9 @@ export default function ChangeRoleDialog({ name, userId, projectId, oldRole }) {
   return (
     <DialogContent>
       <DialogTitle>Change role of {name}</DialogTitle>
-      <DialogDescription mb="3">Old role is {oldRole}</DialogDescription>
+      <DialogDescription className="mb-3">
+        Old role is {oldRole}
+      </DialogDescription>
       <ClientForm
         action={async (_, data) => {
           const result = await changeRole({
@@ -39,13 +40,11 @@ export default function ChangeRoleDialog({ name, userId, projectId, oldRole }) {
         }}
         className="flex flex-col space-y-3"
       >
-        <TextFieldRoot>
-          <TextFieldInput placeholder="New role" name="newRole" required />
-        </TextFieldRoot>
+        <Input placeholder="New role" name="newRole" required />
 
         <div className="flex items-center justify-end space-x-2">
           <DialogClose>
-            <Button variant="soft">Close</Button>
+            <Button variant="ghost">Close</Button>
           </DialogClose>
           <SubmitButton>Save</SubmitButton>
         </div>

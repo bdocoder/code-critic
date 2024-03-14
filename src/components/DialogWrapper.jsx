@@ -1,7 +1,8 @@
 "use client";
 
-import { DialogRoot, DropdownMenuItem } from "@radix-ui/themes";
 import { createContext, useContext, useState } from "react";
+import { Dialog } from "./ui/dialog";
+import { DropdownMenuItem } from "./ui/dropdown-menu";
 
 export const DialogWrapperContext = createContext(null);
 
@@ -11,16 +12,13 @@ export default function DialogWrapper({ children, dialog }) {
   return (
     <DialogWrapperContext.Provider value={{ setOpen }}>
       {children}
-      <DialogRoot onOpenChange={setOpen} open={open}>
+      <Dialog onOpenChange={setOpen} open={open}>
         {dialog}
-      </DialogRoot>
+      </Dialog>
     </DialogWrapperContext.Provider>
   );
 }
 
-/**
- * @param {import("@radix-ui/themes/dist/esm/components/dropdown-menu").DropdownMenuItemProps} props
- */
 export function DropdownDialogToggle(props) {
   const { setOpen } = useContext(DialogWrapperContext);
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { logout } from "@/actions/auth";
-import { DropdownMenuItem } from "@radix-ui/themes";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useTransition } from "react";
 
 export default function LogoutButton() {
@@ -10,7 +10,6 @@ export default function LogoutButton() {
   return (
     <DropdownMenuItem
       disabled={pending}
-      color="red"
       onClick={() => {
         startTransition(async () => {
           await logout();

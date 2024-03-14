@@ -1,11 +1,8 @@
 "use client";
 
-import { DropdownMenuItem } from "@radix-ui/themes";
 import { useTransition } from "react";
+import { DropdownMenuItem } from "./ui/dropdown-menu";
 
-/**
- * @param {{action: () => Promise<any>} & import("@radix-ui/themes/dist/esm/components/dropdown-menu").DropdownMenuItemProps} props
- */
 export default function ActionDropdownItem({ action, ...props }) {
   const [pending, startTransition] = useTransition();
 

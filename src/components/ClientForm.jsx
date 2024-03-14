@@ -1,7 +1,8 @@
 "use client";
 
+import { useLayoutEffect } from "react";
 import { useFormState } from "react-dom";
-import { CalloutRoot, CalloutText } from "@radix-ui/themes";
+import { toast } from "sonner";
 
 /**
  * @param {{action: () => Promise} & React.HTMLProps<HTMLFormElement>} _
@@ -9,13 +10,12 @@ import { CalloutRoot, CalloutText } from "@radix-ui/themes";
 export default function ClientForm({ action, children, ...props }) {
   const [state, formAction] = useFormState(action, { error: null });
 
+  useLayoutEffect(() => {
+    if (state.error) toast.error(state.error, { dismissible: true });
+  }, [state]);
+
   return (
     <form action={formAction} {...props}>
-      {state?.error && (
-        <CalloutRoot color="red">
-          <CalloutText>{state.error}</CalloutText>
-        </CalloutRoot>
-      )}
       {children}
     </form>
   );

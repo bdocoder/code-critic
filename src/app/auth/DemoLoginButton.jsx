@@ -1,7 +1,7 @@
 "use client";
 
 import { loginWithDemoAccount } from "@/actions/auth";
-import { DropdownMenuItem } from "@radix-ui/themes";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useTransition } from "react";
 
 export default function DemoLoginButton({ email, children }) {

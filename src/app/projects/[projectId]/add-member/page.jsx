@@ -2,8 +2,9 @@ import { addMember } from "@/actions/projects";
 import { auth } from "@/auth";
 import ClientForm from "@/components/ClientForm";
 import SubmitButton from "@/components/SubmitButton";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import prisma from "@/db";
-import { Heading, Text, TextFieldInput, TextFieldRoot } from "@radix-ui/themes";
 
 export default async function AddMember({ params: { projectId } }) {
   const session = await auth();
@@ -16,26 +17,26 @@ export default async function AddMember({ params: { projectId } }) {
   });
   if (!isAdmin)
     return (
-      <Text m="auto" color="red" size="4">
+      <p className="m-auto text-2xl text-destructive">
         You must be an admin to view this page
-      </Text>
+      </p>
     );
 
   return (
-    <div className="mx-auto mt-4 text-center">
-      <Heading size="4" mb="3">
-        Add a member
-      </Heading>
-      <ClientForm action={addMember} className="flex flex-col space-y-2">
-        <TextFieldRoot>
-          <TextFieldInput name="email" placeholder="Email" required />
-        </TextFieldRoot>
-        <TextFieldRoot>
-          <TextFieldInput name="role" placeholder="Role" required />
-        </TextFieldRoot>
-        <input name="projectId" value={projectId} type="hidden" />
-        <SubmitButton>Add to project</SubmitButton>
-      </ClientForm>
-    </div>
+    <Card className="m-auto">
+      <CardHeader>
+        <CardTitle>Add a member</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <ClientForm action={addMember} className="flex flex-col space-y-2">
+          <Input name="email" placeholder="Email" required />
+
+          <Input name="role" placeholder="Role" required />
+
+          <input name="projectId" value={projectId} type="hidden" />
+          <SubmitButton>Add to project</SubmitButton>
+        </ClientForm>
+      </CardContent>
+    </Card>
   );
 }

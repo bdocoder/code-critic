@@ -1,10 +1,10 @@
 import { deleteIssue, reverseIssueStatus } from "@/actions/issues";
 import ActionButton from "@/components/ActionButton";
 import prisma from "@/db";
-import { Button, Heading, Text } from "@radix-ui/themes";
 import Link from "next/link";
 import IssueHeader from "./IssueHeader";
 import { auth } from "@/auth";
+import { Button } from "@/components/ui/button";
 
 export default async function IssueInfo({ params: { projectId, issueId } }) {
   const session = await auth();
@@ -49,8 +49,7 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
             )}
             {(isReporter || isAdmin) && (
               <ActionButton
-                color="red"
-                reload={false}
+                variant="destructive"
                 action={async () => {
                   "use server";
                   return await deleteIssue({ issueId, projectId });
@@ -66,50 +65,32 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
       )}
 
       <div className="flex justify-around mt-12">
-        <div>
-          <div className="mb-6">
-            <Heading size="1" className="mb-1 uppercase">
-              Reported by
-            </Heading>
-            <Text as="p" size="4">
-              {issue.reporter.name}
-            </Text>
-          </div>
-          <div>
-            <Heading size="1" className="mt-6 mb-1 uppercase">
-              Reported at
-            </Heading>
-            <Text as="p" size="4">
-              {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
-                issue.dateReported
-              )}
-            </Text>
-          </div>
+        <div className="flex flex-col">
+          <span className="mb-1 text-xs uppercase">Reported by</span>
+          <p className="mb-6 text-lg">{issue.reporter.name}</p>
+          <span className="mb-1 text-xs uppercase">Reported at</span>
+          <p className="text-lg">
+            {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
+              issue.dateReported
+            )}
+          </p>
         </div>
 
-        <div>
-          <div className="mb-4">
-            <Heading size="1" className="mb-1 uppercase">
-              Assigned to
-            </Heading>
-            <Text as="p" size="4">
-              {issue.assignee?.name || "None so far.."}
-            </Text>
-          </div>
-          <div>
-            {issue.dateResolved && (
-              <>
-                <Heading size="1" className="mt-6 mb-1 uppercase">
-                  Resolved at
-                </Heading>
-                <Text as="p" size="4">
-                  {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
-                    issue.dateResolved
-                  )}
-                </Text>
-              </>
-            )}
-          </div>
+        <div className="flex flex-col">
+          <span className="mb-1 text-xs uppercase">Assigned to</span>
+          <p className="mb-6 text-lg">
+            {issue.assignee?.name || "None so far.."}
+          </p>
+          {issue.dateResolved && (
+            <>
+              <span className="mb-1 text-xs uppercase">Resolved at</span>
+              <p className="text-lg">
+                {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
+                  issue.dateResolved
+                )}
+              </p>
+            </>
+          )}
         </div>
       </div>
     </>
