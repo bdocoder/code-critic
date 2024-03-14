@@ -53,4 +53,5 @@ export async function reverseIssueStatus(issueId) {
       dateResolved: issue.status === "open" ? new Date() : null,
     },
   });
+  revalidatePath(`/projects/${issue.projectId}`, "layout");
 }
