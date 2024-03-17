@@ -1,4 +1,4 @@
-This is a simple issue tracker app, made with NextJS & Radix UI.
+This is a simple issue tracker app, made with NextJS & Shadcn UI.
 
 ## Getting Started
 
@@ -10,5 +10,5 @@ npm run dev # or equivalent in other package managers
 
 Then, open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can create a new account or simply login
+You can authenticate with GitHub or login
 with a demo account to see how the app works with pre-generated data.
