@@ -13,6 +13,7 @@ model User {
   email       String  @unique
   githubId    Int?    @unique
   password    String?
+  image       String?
   demoAccount Boolean @default(false)
 
   profiles       MemberProfile[] @relation("member")

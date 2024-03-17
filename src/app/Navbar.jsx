@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import LogoutButton from "./LogoutButton";
 import { auth } from "@/auth";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function Navbar() {
   const session = await auth();
@@ -21,6 +21,7 @@ export default async function Navbar() {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>
+              <AvatarImage src={session.user.image} />
               <AvatarFallback>
                 {session.user.name
                   .split(" ")

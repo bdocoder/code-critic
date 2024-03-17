@@ -35,7 +35,7 @@ export const {
       clientId: getEnvVariable("GITHUB_ID"),
       clientSecret: getEnvVariable("GITHUB_SECRET"),
 
-      async profile({ id, email, name }) {
+      async profile({ id, email, name, avatar_url }) {
         const user = await prisma.user.findUnique({
           where: { githubId: id, email },
         });
@@ -44,6 +44,7 @@ export const {
             id: user.id,
             name: user.name,
             email: user.email,
+            image: user.image,
           };
 
         const newUser = await prisma.user.create({
@@ -51,6 +52,7 @@ export const {
             name,
             email,
             githubId: id,
+            image: avatar_url,
           },
         });
         console.log(
@@ -60,6 +62,7 @@ export const {
           id: newUser.id,
           name: newUser.name,
           email: newUser.email,
+          image: newUser.image,
         };
       },
     }),
