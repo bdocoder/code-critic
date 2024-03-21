@@ -11,7 +11,7 @@ export default function ClientForm({ action, children, ...props }) {
   const [state, formAction] = useFormState(action, { error: null });
 
   useLayoutEffect(() => {
-    if (state.error) toast.error(state.error, { dismissible: true });
+    if (state?.error) toast.error(state.error, { dismissible: true });
   }, [state]);
 
   return (
