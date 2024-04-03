@@ -55,3 +55,22 @@ export async function reverseIssueStatus(issueId) {
   });
   revalidatePath(`/projects/${issue.projectId}`, "layout");
 }
+
+/**
+ * @param {FormData} data
+ */
+export async function addComment({ issueId, userId, projectId }, _, data) {
+  const content = data.get("comment");
+  await prisma.comment.create({
+    data: { content, userId, issueId },
+  });
+  revalidatePath(`/projects/${projectId}/${issueId}`);
+}
+
+/**
+ * @param {FormData} data
+ */
+export async function deleteComment({ commentId, issueId, projectId }) {
+  await prisma.comment.delete({ where: { id: commentId } });
+  revalidatePath(`/projects/${projectId}/${issueId}`);
+}

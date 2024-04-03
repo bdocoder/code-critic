@@ -9,6 +9,7 @@ async function run() {
       where: { demoAccount: true },
     })
   ).map(({ id }) => id);
+  await prisma.comment.deleteMany({ where: { userId: { in: demoIds } } });
   await prisma.issue.deleteMany({
     where: {
       OR: [{ assigneeId: { in: demoIds } }, { reporterId: { in: demoIds } }],

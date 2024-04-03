@@ -5,6 +5,7 @@ import Link from "next/link";
 import IssueHeader from "./IssueHeader";
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
+import Comments from "./Comments";
 
 export default async function IssueInfo({ params: { projectId, issueId } }) {
   const session = await auth();
@@ -19,7 +20,11 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
 
   const issue = await prisma.issue.findUnique({
     where: { id: issueId },
-    include: { reporter: true, assignee: true },
+    include: {
+      reporter: true,
+      assignee: true,
+      comments: { include: { user: true } },
+    },
   });
   const isAssignee = issue.assigneeId === id;
   const isReporter = issue.reporterId === id;
@@ -64,7 +69,7 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
         <IssueHeader issue={issue} />
       )}
 
-      <div className="flex justify-around mt-12">
+      <div className="flex justify-around my-12">
         <div className="flex flex-col">
           <span className="mb-1 text-xs uppercase">Reported by</span>
           <p className="mb-6 text-lg">{issue.reporter.name}</p>
@@ -93,6 +98,13 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
           )}
         </div>
       </div>
+
+      <Comments
+        comments={issue.comments}
+        issueId={issueId}
+        userId={id}
+        projectId={issue.projectId}
+      />
     </>
   );
 }
