@@ -52,7 +52,7 @@ export default function CommentCard({
           <TableBody>
             {!comments.length && (
               <TableRow>
-                <TableCell colspan={4}>
+                <TableCell colSpan={4}>
                   <p className="text-center">No comments yet</p>
                 </TableCell>
               </TableRow>
