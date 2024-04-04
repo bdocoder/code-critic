@@ -29,7 +29,6 @@ export default async function Navbar() {
                   .join("")}
               </AvatarFallback>
             </Avatar>
-            {/* <Button variant="ghost">{session.user.name.charAt(0)}</Button> */}
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
