@@ -41,16 +41,13 @@ export default function AuthPage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DemoLoginButton email="hamada@gmail.com">
-                Hamada (a PM)
+                Hamada (Project Manager)
+              </DemoLoginButton>
+              <DemoLoginButton email="abdullah@gmail.com">
+                Abdullah (Web Developer)
               </DemoLoginButton>
               <DemoLoginButton email="omar@gmail.com">
-                Omar (a developer)
-              </DemoLoginButton>
-              <DemoLoginButton email="ali@gmail.com">
-                Ali (a db admin)
-              </DemoLoginButton>
-              <DemoLoginButton email="essam@gmail.com">
-                Essam (an ordinary user)
+                Omar (UI/UX Designer)
               </DemoLoginButton>
             </DropdownMenuContent>
           </DropdownMenu>

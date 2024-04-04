@@ -4,6 +4,7 @@ import prisma from "@/db";
 
 export async function resetDemoData() {
   // OLD DATA DELETION
+
   const demoIds = (
     await prisma.user.findMany({
       where: { demoAccount: true },
@@ -20,7 +21,8 @@ export async function resetDemoData() {
   await prisma.user.deleteMany({ where: { id: { in: demoIds } } });
 
   // DEMO DATA CREATION
-  const user1 = await prisma.user.create({
+
+  const hamada = await prisma.user.create({
     data: {
       email: "hamada@gmail.com",
       name: "Hamada",
@@ -28,7 +30,17 @@ export async function resetDemoData() {
       demoAccount: true,
     },
   });
-  const user2 = await prisma.user.create({
+
+  const abdullah = await prisma.user.create({
+    data: {
+      email: "abdullah@gmail.com",
+      name: "Abdullah",
+      password: "abdullah",
+      demoAccount: true,
+    },
+  });
+
+  const omar = await prisma.user.create({
     data: {
       email: "omar@gmail.com",
       name: "Omar",
@@ -36,57 +48,75 @@ export async function resetDemoData() {
       demoAccount: true,
     },
   });
-  const user3 = await prisma.user.create({
+
+  const thisProject = await prisma.project.create({
     data: {
-      email: "ali@gmail.com",
-      name: "Ali",
-      password: "ali",
-      demoAccount: true,
-    },
-  });
-  const user4 = await prisma.user.create({
-    data: {
-      email: "essam@gmail.com",
-      name: "Essam",
-      password: "essam",
-      demoAccount: true,
-    },
-  });
-  await prisma.project.create({
-    data: {
-      title: "Awesome Project",
+      title: "This Project",
       description:
-        "A demo project used for.. you guessed it, explanation purpose.",
+        "A sample project resembling this site and some of its issues.",
       members: {
         createMany: {
           data: [
-            { userId: user1.id, isAdmin: true },
-            { userId: user2.id, role: "Web Developer" },
-            { userId: user3.id, role: "Database Administrator" },
+            { userId: hamada.id, isAdmin: true },
+            { userId: abdullah.id, role: "Web Developer" },
+            { userId: omar.id, role: "UI/UX Designer" },
           ],
         },
       },
-      issues: {
-        createMany: {
-          data: [
-            {
-              title: "Big Issue",
-              description:
-                "Nothing, just an example of an issue that doesn't exist (or does it?)",
-              reporterId: user1.id,
-              assigneeId: user2.id,
-              dateReported: new Date(2023, 9, 5),
-            },
-            {
-              title: "Another Big Issue",
-              description: "Empty for now",
-              reporterId: user4.id,
-              assigneeId: user3.id,
-              dateReported: new Date(2023, 9, 8),
-            },
-          ],
+    },
+  });
+
+  await prisma.issue.create({
+    data: {
+      title: "Use email & password for authentication",
+      description: "GitHub shouldn't be the only way to sign in.",
+      projectId: thisProject.id,
+      reporterId: hamada.id,
+      assigneeId: abdullah.id,
+      dateReported: new Date(2024, 3, 4),
+    },
+  });
+
+  await prisma.issue.create({
+    data: {
+      title: "Fix word wrap in comment and issue tables",
+      projectId: thisProject.id,
+      reporterId: omar.id,
+      assigneeId: abdullah.id,
+      dateReported: new Date(2024, 3, 4),
+    },
+  });
+
+  await prisma.issue.create({
+    data: {
+      title: "Implement destructive variants for dropdowns and toasts",
+      description:
+        "These two components shouldn't have the default look" +
+        " when implying a dangerous action or an error.",
+      projectId: thisProject.id,
+      reporterId: omar.id,
+      assigneeId: abdullah.id,
+      dateReported: new Date(2024, 3, 4),
+
+      comments: {
+        create: {
+          userId: hamada.id,
+          content: "Consider adding other color variants as well.",
+          createdAt: new Date(2024, 3, 4),
         },
       },
+    },
+  });
+
+  await prisma.issue.create({
+    data: {
+      title: "Fix the text hierarchy (size, spacing, etc) in the sidebar",
+      description:
+        "Users should have an easy way to scan the labels and links.",
+      projectId: thisProject.id,
+      reporterId: omar.id,
+      assigneeId: abdullah.id,
+      dateReported: new Date(2024, 3, 4),
     },
   });
 }
