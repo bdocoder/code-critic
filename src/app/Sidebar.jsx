@@ -23,8 +23,14 @@ export default async function Sidebar() {
       <span className="text-sm text-center uppercase">Projects</span>
       <div className="flex flex-col space-y-2">
         {user?.profiles.map(({ isAdmin, project }) => (
-          <Link key={project.id} href={`/projects/${project.id}`} passHref>
-            <Button className="w-full text-lg" variant="ghost" size="lg">
+          <Button
+            className="w-full text-lg"
+            variant="ghost"
+            size="lg"
+            asChild
+            key={project.id}
+          >
+            <Link href={`/projects/${project.id}`}>
               {isAdmin && (
                 <TooltipProvider>
                   <Tooltip>
@@ -36,15 +42,15 @@ export default async function Sidebar() {
                 </TooltipProvider>
               )}
               {project.title}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         ))}
-        <Link href="/projects/create" passHref>
-          <Button className="w-full text-lg" variant="ghost" size="lg">
+        <Button className="w-full text-lg" variant="ghost" size="lg" asChild>
+          <Link href="/projects/create">
             <PlusIcon className="mr-2" />
             Create
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </div>
 
       {/* for spacing purposes */}
@@ -54,16 +60,12 @@ export default async function Sidebar() {
 
       <div className="flex flex-col space-y-2">
         {/* TODO: add the count of open issues */}
-        <Link href="/issues/assigned" passHref>
-          <Button className="w-full text-lg" variant="ghost" size="lg">
-            Assigned to me
-          </Button>
-        </Link>
-        <Link href="/issues/reported" passHref>
-          <Button className="w-full text-lg" variant="ghost" size="lg">
-            Reported by me
-          </Button>
-        </Link>
+        <Button className="w-full text-lg" variant="ghost" size="lg" asChild>
+          <Link href="/issues/assigned">Assigned to me</Link>
+        </Button>
+        <Button className="w-full text-lg" variant="ghost" size="lg" asChild>
+          <Link href="/issues/reported">Reported by me</Link>
+        </Button>
       </div>
     </aside>
   );
