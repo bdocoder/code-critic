@@ -25,7 +25,8 @@ export default function ResetDemoDataButton() {
                 toast.error("An error occurred!", { dismissible: true });
               }
             }}
-            variant="icon"
+            size="icon"
+            variant="ghost"
           >
             <ReloadIcon />
           </ActionButton>
