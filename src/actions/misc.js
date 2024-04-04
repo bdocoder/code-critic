@@ -1,8 +1,8 @@
-const { PrismaClient } = require("@prisma/client");
+"use server";
 
-async function run() {
-  const prisma = new PrismaClient();
+import prisma from "@/db";
 
+export async function resetDemoData() {
   // OLD DATA DELETION
   const demoIds = (
     await prisma.user.findMany({
@@ -52,7 +52,7 @@ async function run() {
       demoAccount: true,
     },
   });
-  const project1 = await prisma.project.create({
+  await prisma.project.create({
     data: {
       title: "Awesome Project",
       description:
@@ -90,5 +90,3 @@ async function run() {
     },
   });
 }
-
-run();

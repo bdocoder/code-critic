@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import ResetDemoDataButton from "./ResetDemoDataButton";
 
 export default function AuthPage() {
   return (
@@ -24,34 +25,37 @@ export default function AuthPage() {
         <CardTitle>Authentication</CardTitle>
         <CardDescription>Verify your identity to continue</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col">
-        <ClientForm action={loginWithGitHub} className="mb-2.5">
-          <SubmitButton>
+      <CardContent>
+        <ClientForm action={loginWithGitHub} className="flex flex-col mb-3">
+          <SubmitButton className="self-stretch">
             <GitHubLogoIcon className="mr-2" />
             Continue with GitHub
           </SubmitButton>
         </ClientForm>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="mx-auto" variant="ghost">
-              Use a demo account
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DemoLoginButton email="hamada@gmail.com">
-              Hamada (a PM)
-            </DemoLoginButton>
-            <DemoLoginButton email="omar@gmail.com">
-              Omar (a developer)
-            </DemoLoginButton>
-            <DemoLoginButton email="ali@gmail.com">
-              Ali (a db admin)
-            </DemoLoginButton>
-            <DemoLoginButton email="essam@gmail.com">
-              Essam (an ordinary user)
-            </DemoLoginButton>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex space-x-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="flex-grow" variant="ghost">
+                Use a demo account
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DemoLoginButton email="hamada@gmail.com">
+                Hamada (a PM)
+              </DemoLoginButton>
+              <DemoLoginButton email="omar@gmail.com">
+                Omar (a developer)
+              </DemoLoginButton>
+              <DemoLoginButton email="ali@gmail.com">
+                Ali (a db admin)
+              </DemoLoginButton>
+              <DemoLoginButton email="essam@gmail.com">
+                Essam (an ordinary user)
+              </DemoLoginButton>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <ResetDemoDataButton />
+        </div>
       </CardContent>
     </Card>
   );

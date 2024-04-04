@@ -6,8 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate && npm run generate-demo-data",
-    "generate-demo-data": "node scripts/generate-demo-data.js"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@fontsource/inter": "^5.0.13",
