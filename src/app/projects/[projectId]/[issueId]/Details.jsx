@@ -42,35 +42,6 @@ export default function Details({ issue }) {
           )}
         </div>
       </CardContent>
-      {/* <div className="flex justify-around my-12">
-      <div className="flex flex-col">
-        <span className="mb-1 text-xs uppercase">Reported by</span>
-        <p className="mb-6 text-lg">{issue.reporter.name}</p>
-        <span className="mb-1 text-xs uppercase">Reported at</span>
-        <p className="text-lg">
-          {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
-            issue.dateReported
-          )}
-        </p>
-      </div>
-
-      <div className="flex flex-col">
-        <span className="mb-1 text-xs uppercase">Assigned to</span>
-        <p className="mb-6 text-lg">
-          {issue.assignee?.name || "None so far.."}
-        </p>
-        {issue.dateResolved && (
-          <>
-            <span className="mb-1 text-xs uppercase">Resolved at</span>
-            <p className="text-lg">
-              {Intl.DateTimeFormat("en", { dateStyle: "full" }).format(
-                issue.dateResolved
-              )}
-            </p>
-          </>
-        )}
-      </div>
-    </div> */}
     </Card>
   );
 }
