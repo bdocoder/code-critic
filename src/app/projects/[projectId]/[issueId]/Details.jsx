@@ -27,7 +27,7 @@ export default function Details({ issue }) {
             {Intl.DateTimeFormat("en", {
               dateStyle: "medium",
               timeStyle: "short",
-            }).format(issue.createdAt)}
+            }).format(issue.dateReported)}
           </span>
           {issue.status === "closed" && (
             <>
