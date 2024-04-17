@@ -65,6 +65,7 @@ export async function deleteIssue({ issueId, projectId }) {
   await prisma.notification.deleteMany({
     where: { type: "issue_comment", resourceId: { in: commentIds } },
   });
+  await prisma.comment.deleteMany({ where: { issueId } });
   await prisma.issue.delete({ where: { id: issueId } });
   await prisma.notification.deleteMany({
     where: { resourceId: issueId },
