@@ -44,6 +44,13 @@ export async function addMember(_, data) {
   await prisma.memberProfile.create({
     data: { projectId, role, userId: user.id },
   });
+  await prisma.notification.create({
+    data: {
+      type: "project_add",
+      resourceId: projectId,
+      userId: user.id,
+    },
+  });
   revalidatePath(`/projects/${projectId}`);
   redirect(`/projects/${projectId}`);
 }
@@ -69,6 +76,23 @@ export async function removeMember({ userId, projectId }) {
   await prisma.issue.updateMany({
     where: { AND: [{ assigneeId: userId }, { projectId }] },
     data: { assigneeId: null },
+  });
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    include: {
+      issues: {
+        include: { comments: true },
+      },
+    },
+  });
+  const ids = [
+    project.id,
+    ...project.issues.reduce((prev, curr) => {
+      return [...prev, curr.id, ...curr.comments.map((c) => c.id)];
+    }, []),
+  ];
+  await prisma.notification.deleteMany({
+    where: { AND: [{ userId }, { resourceId: { in: ids } }] },
   });
   revalidatePath(`/projects/${projectId}`, "layout");
 }

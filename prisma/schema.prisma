@@ -20,6 +20,7 @@ model User {
   reportedIssues Issue[]         @relation("issue_reporter")
   assignedIssues Issue[]         @relation("issue_assignee")
   comments       Comment[]       @relation("comment")
+  notifications  Notification[]  @relation("notification")
 }
 
 model Project {
@@ -70,7 +71,24 @@ model Comment {
   issue Issue @relation("comment", fields: [issueId], references: [id])
 }
 
+model Notification {
+  id         String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String           @db.ObjectId
+  type       NotificationType
+  resourceId String?          @db.ObjectId
+  read       Boolean          @default(false)
+  timestamp  DateTime         @default(now())
+
+  user User @relation("notification", fields: [userId], references: [id])
+}
+
 enum IssueStatus {
   open
   closed
+}
+
+enum NotificationType {
+  project_add
+  issue_assign
+  issue_comment
 }

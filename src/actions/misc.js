@@ -18,6 +18,7 @@ export async function resetDemoData() {
   });
   await prisma.memberProfile.deleteMany({ where: { userId: { in: demoIds } } });
   await prisma.project.deleteMany({ where: { members: { none: {} } } });
+  await prisma.notification.deleteMany({ where: { userId: { in: demoIds } } });
   await prisma.user.deleteMany({ where: { id: { in: demoIds } } });
 
   // DEMO DATA CREATION
@@ -66,7 +67,7 @@ export async function resetDemoData() {
     },
   });
 
-  await prisma.issue.create({
+  const issue1 = await prisma.issue.create({
     data: {
       title: "Use email & password for authentication",
       description: "GitHub shouldn't be the only way to sign in.",
@@ -77,7 +78,7 @@ export async function resetDemoData() {
     },
   });
 
-  await prisma.issue.create({
+  const issue2 = await prisma.issue.create({
     data: {
       title: "Fix word wrap in comment and issue tables",
       projectId: thisProject.id,
@@ -87,7 +88,7 @@ export async function resetDemoData() {
     },
   });
 
-  await prisma.issue.create({
+  const issue3 = await prisma.issue.create({
     data: {
       title: "Implement destructive variants for dropdowns and toasts",
       description:
@@ -97,18 +98,19 @@ export async function resetDemoData() {
       reporterId: omar.id,
       assigneeId: abdullah.id,
       dateReported: new Date(2024, 3, 4),
-
-      comments: {
-        create: {
-          userId: hamada.id,
-          content: "Consider adding other color variants as well.",
-          createdAt: new Date(2024, 3, 4),
-        },
-      },
     },
   });
 
-  await prisma.issue.create({
+  const comment1 = await prisma.comment.create({
+    data: {
+      userId: hamada.id,
+      content: "Consider adding other color variants as well.",
+      createdAt: new Date(2024, 3, 4),
+      issueId: issue3.id,
+    },
+  });
+
+  const issue4 = await prisma.issue.create({
     data: {
       title: "Fix the text hierarchy (size, spacing, etc) in the sidebar",
       description:
@@ -118,5 +120,52 @@ export async function resetDemoData() {
       assigneeId: abdullah.id,
       dateReported: new Date(2024, 3, 4),
     },
+  });
+
+  await prisma.notification.createMany({
+    data: [
+      {
+        userId: abdullah.id,
+        type: "project_add",
+        resourceId: thisProject.id,
+        timestamp: new Date(2024, 3, 3),
+      },
+      {
+        userId: omar.id,
+        type: "project_add",
+        resourceId: thisProject.id,
+        timestamp: new Date(2024, 3, 3),
+      },
+      {
+        userId: abdullah.id,
+        type: "issue_assign",
+        resourceId: issue1.id,
+        timestamp: new Date(2024, 3, 4),
+      },
+      {
+        userId: abdullah.id,
+        type: "issue_assign",
+        resourceId: issue2.id,
+        timestamp: new Date(2024, 3, 4),
+      },
+      {
+        userId: abdullah.id,
+        type: "issue_assign",
+        resourceId: issue3.id,
+        timestamp: new Date(2024, 3, 4),
+      },
+      {
+        userId: omar.id,
+        type: "issue_comment",
+        resourceId: comment1.id,
+        timestamp: new Date(2024, 3, 4),
+      },
+      {
+        userId: abdullah.id,
+        type: "issue_assign",
+        resourceId: issue4.id,
+        timestamp: new Date(2024, 3, 4),
+      },
+    ],
   });
 }

@@ -8,34 +8,67 @@ import {
 import LogoutButton from "./LogoutButton";
 import { auth } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { BellIcon } from "@radix-ui/react-icons";
+import NotificationsList from "./NotificationsList";
+import prisma from "@/db";
 
 export default async function Navbar() {
   const session = await auth();
 
+  const notifications =
+    session?.user?.id &&
+    (await prisma.notification.findMany({
+      where: { userId: session.user.id },
+    }));
+
+  const hasUnreadNotifications = notifications?.some((n) => !n.read);
+
   return (
-    <header className="flex items-center w-full col-span-2 px-3 py-2 space-x-2 border-b">
+    <header className="flex items-center w-full col-span-2 px-3 py-2 space-x-4 border-b">
       <strong className="font-medium">Code Critic</strong>
       <div style={{ flexGrow: 1 }}></div>
 
       {session?.user && (
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar>
-              <AvatarImage src={session.user.image} />
-              <AvatarFallback>
-                {session.user.name
-                  .split(" ")
-                  .map((word) => word.charAt(0))
-                  .join("")}
-              </AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <LogoutButton />
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button size="icon" variant="outline" className="relative">
+                {hasUnreadNotifications && (
+                  <div className="absolute w-2 h-2 rounded-full -top-1 -right-1 bg-primary" />
+                )}
+                <BellIcon width={16} height={16} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="p-0 overflow-auto max-h-80">
+              <NotificationsList notifications={notifications} />
+            </PopoverContent>
+          </Popover>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Avatar>
+                <AvatarImage src={session.user.image} />
+                <AvatarFallback>
+                  {session.user.name
+                    .split(" ")
+                    .map((word) => word.charAt(0))
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <LogoutButton />
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       )}
     </header>
   );
