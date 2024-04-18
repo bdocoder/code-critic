@@ -24,7 +24,7 @@ export async function resetDemoData() {
   // DEMO DATA CREATION
 
   const [hamada, abdullah, omar] = await Promise.all([
-    await prisma.user.create({
+    prisma.user.create({
       data: {
         email: "hamada@gmail.com",
         name: "Hamada",
@@ -33,7 +33,7 @@ export async function resetDemoData() {
       },
     }),
 
-    await prisma.user.create({
+    prisma.user.create({
       data: {
         email: "abdullah@gmail.com",
         name: "Abdullah",
@@ -42,7 +42,7 @@ export async function resetDemoData() {
       },
     }),
 
-    await prisma.user.create({
+    prisma.user.create({
       data: {
         email: "omar@gmail.com",
         name: "Omar",
@@ -70,7 +70,7 @@ export async function resetDemoData() {
   });
 
   const [issue1, issue2, issue3, issue4] = await Promise.all([
-    await prisma.issue.create({
+    prisma.issue.create({
       data: {
         title: "Use email & password for authentication",
         description: "GitHub shouldn't be the only way to sign in.",
@@ -81,7 +81,7 @@ export async function resetDemoData() {
       },
     }),
 
-    await prisma.issue.create({
+    prisma.issue.create({
       data: {
         title: "Fix word wrap in comment and issue tables",
         projectId: thisProject.id,
@@ -91,7 +91,7 @@ export async function resetDemoData() {
       },
     }),
 
-    await prisma.issue.create({
+    prisma.issue.create({
       data: {
         title: "Implement destructive variants for dropdowns and toasts",
         description:
@@ -104,7 +104,7 @@ export async function resetDemoData() {
       },
     }),
 
-    await prisma.issue.create({
+    prisma.issue.create({
       data: {
         title: "Fix the text hierarchy (size, spacing, etc) in the sidebar",
         description:
