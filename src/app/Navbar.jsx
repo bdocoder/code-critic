@@ -14,9 +14,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { BellIcon } from "@radix-ui/react-icons";
+import { BellIcon, ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import NotificationsList from "./NotificationsList";
 import prisma from "@/db";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default async function Navbar() {
   const session = await auth();
@@ -47,6 +48,16 @@ export default async function Navbar() {
             </PopoverTrigger>
             <PopoverContent className="p-0 overflow-auto max-h-80">
               <NotificationsList notifications={notifications} />
+              {!notifications.length && (
+                <Alert>
+                  <ExclamationTriangleIcon className="w-4 h-4" />
+                  <AlertDescription>
+                    If you do not see demo notifications when you expect them,
+                    the reason might be that they cannot be generated within a
+                    production environment, and i cannot figure out the reason.
+                  </AlertDescription>
+                </Alert>
+              )}
             </PopoverContent>
           </Popover>
 
