@@ -23,32 +23,34 @@ export async function resetDemoData() {
 
   // DEMO DATA CREATION
 
-  const hamada = await prisma.user.create({
-    data: {
-      email: "hamada@gmail.com",
-      name: "Hamada",
-      password: "hamada",
-      demoAccount: true,
-    },
-  });
+  const [hamada, abdullah, omar] = await Promise.all([
+    await prisma.user.create({
+      data: {
+        email: "hamada@gmail.com",
+        name: "Hamada",
+        password: "hamada",
+        demoAccount: true,
+      },
+    }),
 
-  const abdullah = await prisma.user.create({
-    data: {
-      email: "abdullah@gmail.com",
-      name: "Abdullah",
-      password: "abdullah",
-      demoAccount: true,
-    },
-  });
+    await prisma.user.create({
+      data: {
+        email: "abdullah@gmail.com",
+        name: "Abdullah",
+        password: "abdullah",
+        demoAccount: true,
+      },
+    }),
 
-  const omar = await prisma.user.create({
-    data: {
-      email: "omar@gmail.com",
-      name: "Omar",
-      password: "omar",
-      demoAccount: true,
-    },
-  });
+    await prisma.user.create({
+      data: {
+        email: "omar@gmail.com",
+        name: "Omar",
+        password: "omar",
+        demoAccount: true,
+      },
+    }),
+  ]);
 
   const thisProject = await prisma.project.create({
     data: {
@@ -67,39 +69,53 @@ export async function resetDemoData() {
     },
   });
 
-  const issue1 = await prisma.issue.create({
-    data: {
-      title: "Use email & password for authentication",
-      description: "GitHub shouldn't be the only way to sign in.",
-      projectId: thisProject.id,
-      reporterId: hamada.id,
-      assigneeId: abdullah.id,
-      dateReported: new Date(2024, 3, 4),
-    },
-  });
+  const [issue1, issue2, issue3, issue4] = await Promise.all([
+    await prisma.issue.create({
+      data: {
+        title: "Use email & password for authentication",
+        description: "GitHub shouldn't be the only way to sign in.",
+        projectId: thisProject.id,
+        reporterId: hamada.id,
+        assigneeId: abdullah.id,
+        dateReported: new Date(2024, 3, 4),
+      },
+    }),
 
-  const issue2 = await prisma.issue.create({
-    data: {
-      title: "Fix word wrap in comment and issue tables",
-      projectId: thisProject.id,
-      reporterId: omar.id,
-      assigneeId: abdullah.id,
-      dateReported: new Date(2024, 3, 4),
-    },
-  });
+    await prisma.issue.create({
+      data: {
+        title: "Fix word wrap in comment and issue tables",
+        projectId: thisProject.id,
+        reporterId: omar.id,
+        assigneeId: abdullah.id,
+        dateReported: new Date(2024, 3, 4),
+      },
+    }),
 
-  const issue3 = await prisma.issue.create({
-    data: {
-      title: "Implement destructive variants for dropdowns and toasts",
-      description:
-        "These two components shouldn't have the default look" +
-        " when implying a dangerous action or an error.",
-      projectId: thisProject.id,
-      reporterId: omar.id,
-      assigneeId: abdullah.id,
-      dateReported: new Date(2024, 3, 4),
-    },
-  });
+    await prisma.issue.create({
+      data: {
+        title: "Implement destructive variants for dropdowns and toasts",
+        description:
+          "These two components shouldn't have the default look" +
+          " when implying a dangerous action or an error.",
+        projectId: thisProject.id,
+        reporterId: omar.id,
+        assigneeId: abdullah.id,
+        dateReported: new Date(2024, 3, 4),
+      },
+    }),
+
+    await prisma.issue.create({
+      data: {
+        title: "Fix the text hierarchy (size, spacing, etc) in the sidebar",
+        description:
+          "Users should have an easy way to scan the labels and links.",
+        projectId: thisProject.id,
+        reporterId: omar.id,
+        assigneeId: abdullah.id,
+        dateReported: new Date(2024, 3, 4),
+      },
+    }),
+  ]);
 
   const comment1 = await prisma.comment.create({
     data: {
@@ -107,18 +123,6 @@ export async function resetDemoData() {
       content: "Consider adding other color variants as well.",
       createdAt: new Date(2024, 3, 4),
       issueId: issue3.id,
-    },
-  });
-
-  const issue4 = await prisma.issue.create({
-    data: {
-      title: "Fix the text hierarchy (size, spacing, etc) in the sidebar",
-      description:
-        "Users should have an easy way to scan the labels and links.",
-      projectId: thisProject.id,
-      reporterId: omar.id,
-      assigneeId: abdullah.id,
-      dateReported: new Date(2024, 3, 4),
     },
   });
 
