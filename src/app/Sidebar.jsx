@@ -19,7 +19,7 @@ export default async function Sidebar() {
   });
 
   return (
-    <aside className="flex flex-col px-4 py-5 space-y-4 border-r">
+    <nav className="flex flex-col px-4 py-5 space-y-4 border-r">
       <span className="text-sm text-center uppercase">Projects</span>
       <div className="flex flex-col space-y-2">
         {user?.profiles.map(({ isAdmin, project }) => (
@@ -67,6 +67,6 @@ export default async function Sidebar() {
           <Link href="/tickets/reported">Reported by me</Link>
         </Button>
       </div>
-    </aside>
+    </nav>
   );
 }
