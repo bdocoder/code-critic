@@ -16,11 +16,11 @@ model User {
   image       String?
   demoAccount Boolean @default(false)
 
-  profiles       MemberProfile[] @relation("member")
-  reportedIssues Issue[]         @relation("issue_reporter")
-  assignedIssues Issue[]         @relation("issue_assignee")
-  comments       Comment[]       @relation("comment")
-  notifications  Notification[]  @relation("notification")
+  profiles        MemberProfile[] @relation("member")
+  tickets         Ticket[]        @relation("ticket_reporter")
+  assignedTickets Ticket[]        @relation("ticket_assignee")
+  comments        Comment[]       @relation("comment")
+  notifications   Notification[]  @relation("notification")
 }
 
 model Project {
@@ -29,7 +29,7 @@ model Project {
   description String?
 
   members MemberProfile[] @relation("member")
-  issues  Issue[]         @relation("issue")
+  tickets Ticket[]        @relation("ticket")
 }
 
 model MemberProfile {
@@ -43,20 +43,20 @@ model MemberProfile {
   project Project @relation("member", fields: [projectId], references: [id])
 }
 
-model Issue {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+model Ticket {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   description  String?
-  status       IssueStatus @default(open)
-  dateReported DateTime    @default(now())
+  status       TicketStatus @default(open)
+  dateReported DateTime     @default(now())
   dateResolved DateTime?
-  reporterId   String      @db.ObjectId
-  assigneeId   String?     @db.ObjectId
-  projectId    String      @db.ObjectId
+  reporterId   String       @db.ObjectId
+  assigneeId   String?      @db.ObjectId
+  projectId    String       @db.ObjectId
 
-  reporter User      @relation("issue_reporter", fields: [reporterId], references: [id])
-  assignee User?     @relation("issue_assignee", fields: [assigneeId], references: [id])
-  project  Project   @relation("issue", fields: [projectId], references: [id])
+  reporter User      @relation("ticket_reporter", fields: [reporterId], references: [id])
+  assignee User?     @relation("ticket_assignee", fields: [assigneeId], references: [id])
+  project  Project   @relation("ticket", fields: [projectId], references: [id])
   comments Comment[] @relation("comment")
 }
 
@@ -65,10 +65,10 @@ model Comment {
   createdAt DateTime @default(now())
   content   String
   userId    String   @db.ObjectId
-  issueId   String   @db.ObjectId
+  ticketId  String   @db.ObjectId
 
-  user  User  @relation("comment", fields: [userId], references: [id])
-  issue Issue @relation("comment", fields: [issueId], references: [id])
+  user   User   @relation("comment", fields: [userId], references: [id])
+  ticket Ticket @relation("comment", fields: [ticketId], references: [id])
 }
 
 model Notification {
@@ -82,13 +82,13 @@ model Notification {
   user User @relation("notification", fields: [userId], references: [id])
 }
 
-enum IssueStatus {
+enum TicketStatus {
   open
   closed
 }
 
 enum NotificationType {
   project_add
-  issue_assign
-  issue_comment
+  ticket_assign
+  ticket_comment
 }

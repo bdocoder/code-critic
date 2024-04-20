@@ -17,21 +17,21 @@ export default async function Notifications({ notifications: _notifications }) {
         text = `You have been added to a project: ${project.title}`;
         url = `/projects/${project.id}`;
       }
-      if (type === "issue_assign") {
-        const issue = await prisma.issue.findUnique({
+      if (type === "ticket_assign") {
+        const ticket = await prisma.ticket.findUnique({
           where: { id: resourceId },
           include: { project: true },
         });
-        text = `You have been assigned an issue: ${issue.title}`;
-        url = `/projects/${issue.project.id}/${issue.id}`;
+        text = `You have been assigned a ticket: ${ticket.title}`;
+        url = `/projects/${ticket.project.id}/${ticket.id}`;
       }
-      if (type === "issue_comment") {
+      if (type === "ticket_comment") {
         const comment = await prisma.comment.findUnique({
           where: { id: resourceId },
-          include: { user: true, issue: { include: { project: true } } },
+          include: { user: true, ticket: { include: { project: true } } },
         });
-        text = `${comment?.user.name} commented on your issue: ${comment?.issue?.title}`;
-        url = `/projects/${comment?.issue?.project.id}/${comment?.issue?.id}`;
+        text = `${comment?.user.name} commented on your ticket: ${comment?.ticket?.title}`;
+        url = `/projects/${comment?.ticket?.project.id}/${comment?.ticket?.id}`;
       }
       return { text, url, ...rest };
     })

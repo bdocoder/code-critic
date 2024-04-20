@@ -1,14 +1,14 @@
-import { deleteIssue, reverseIssueStatus } from "@/actions/issues";
+import { deleteTicket, reverseTicketStatus } from "@/actions/tickets";
 import ActionButton from "@/components/ActionButton";
 import prisma from "@/db";
 import Link from "next/link";
-import IssueHeader from "./IssueHeader";
+import TicketHeader from "./TicketHeader";
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import Comments from "./Comments";
 import Details from "./Details";
 
-export default async function IssueInfo({ params: { projectId, issueId } }) {
+export default async function TicketInfo({ params: { projectId, ticketId } }) {
   const session = await auth();
   const id = session.user.id;
   const isAdmin =
@@ -19,27 +19,27 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
       })
     )?.isAdmin;
 
-  const issue = await prisma.issue.findUnique({
-    where: { id: issueId },
+  const ticket = await prisma.ticket.findUnique({
+    where: { id: ticketId },
     include: {
       reporter: true,
       assignee: true,
       comments: { include: { user: true } },
     },
   });
-  const isAssignee = issue.assigneeId === id;
-  const isReporter = issue.reporterId === id;
+  const isAssignee = ticket.assigneeId === id;
+  const isReporter = ticket.reporterId === id;
 
   return (
     <>
       {isAdmin || isAssignee || isReporter ? (
         <div className="flex items-center justify-between">
           <div>
-            <IssueHeader issue={issue} showDescription />
+            <TicketHeader ticket={ticket} showDescription />
           </div>
           <div className="flex space-x-2">
             {isAdmin && (
-              <Link href={`/projects/${projectId}/${issueId}/assign`} passHref>
+              <Link href={`/projects/${projectId}/${ticketId}/assign`} passHref>
                 <Button>Assign</Button>
               </Link>
             )}
@@ -47,10 +47,10 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
               <ActionButton
                 action={async () => {
                   "use server";
-                  return await reverseIssueStatus(issueId);
+                  return await reverseTicketStatus(ticketId);
                 }}
               >
-                Mark as {issue.status === "open" ? "closed" : "open"}
+                Mark as {ticket.status === "open" ? "closed" : "open"}
               </ActionButton>
             )}
             {(isReporter || isAdmin) && (
@@ -58,27 +58,27 @@ export default async function IssueInfo({ params: { projectId, issueId } }) {
                 variant="destructive"
                 action={async () => {
                   "use server";
-                  return await deleteIssue({ issueId, projectId });
+                  return await deleteTicket({ ticketId, projectId });
                 }}
               >
-                Delete Issue
+                Delete Ticket
               </ActionButton>
             )}
           </div>
         </div>
       ) : (
-        <IssueHeader issue={issue} />
+        <TicketHeader ticket={ticket} />
       )}
 
       <div className="flex flex-wrap items-start gap-8 mt-6">
         <Comments
           className="flex-grow"
-          comments={issue.comments}
-          issueId={issueId}
+          comments={ticket.comments}
+          ticketId={ticketId}
           userId={id}
-          projectId={issue.projectId}
+          projectId={ticket.projectId}
         />
-        <Details issue={issue} />
+        <Details ticket={ticket} />
       </div>
     </>
   );

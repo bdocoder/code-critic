@@ -1,4 +1,4 @@
-import { addComment, deleteComment } from "@/actions/issues";
+import { addComment, deleteComment } from "@/actions/tickets";
 import ActionButton from "@/components/ActionButton";
 import ClientForm from "@/components/ClientForm";
 import SubmitButton from "@/components/SubmitButton";
@@ -15,11 +15,11 @@ import { Textarea } from "@/components/ui/textarea";
 
 /**
  *
- * @param {{comments: import("@prisma/client").Comment[], issueId: string, userId: string, projectId: string}} props
+ * @param {{comments: import("@prisma/client").Comment[], ticketId: string, userId: string, projectId: string}} props
  */
 export default function CommentCard({
   comments,
-  issueId,
+  ticketId,
   userId,
   projectId,
   ...props
@@ -32,7 +32,7 @@ export default function CommentCard({
       <CardContent>
         <ClientForm
           className="mb-6 space-y-4"
-          action={addComment.bind(null, { issueId, userId, projectId })}
+          action={addComment.bind(null, { ticketId, userId, projectId })}
         >
           <label htmlFor="comment" className="text-sm">
             Add a comment
@@ -76,7 +76,7 @@ export default function CommentCard({
                     variant="destructive"
                     action={deleteComment.bind(null, {
                       commentId: comment.id,
-                      issueId,
+                      ticketId,
                       projectId,
                     })}
                   >

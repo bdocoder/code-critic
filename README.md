@@ -1,4 +1,4 @@
-This is a simple issue tracker app, made with NextJS & Shadcn UI.
+This is a simple bug tracker app, made with NextJS & Shadcn UI.
 
 ## Getting Started
 

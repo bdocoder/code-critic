@@ -10,27 +10,27 @@ import Link from "next/link";
 
 /**
  *
- * @param {{issues: import("@prisma/client").Issue[], title: string}} props
+ * @param {{tickets: import("@prisma/client").Ticket[], title: string}} props
  */
-export default function IssueList({ issues, title }) {
+export default function TicketList({ tickets, title }) {
   return (
     <div className="px-8 py-6">
       <h1 className="mb-6">{title}</h1>
-      {issues.length === 0 && <p className="text-lg">None so far.. </p>}
+      {tickets.length === 0 && <p className="text-lg">None so far.. </p>}
       <div className="flex flex-col space-y-4 max-w-max">
-        {issues.map(
+        {tickets.map(
           ({
             id,
             dateReported,
             description,
             status,
             projectId,
-            title: issueTitle,
+            title: ticketTitle,
           }) => (
             <Link key={id} href={`/projects/${projectId}/${id}`} passHref>
               <Card>
                 <CardHeader>
-                  <CardTitle>{issueTitle}</CardTitle>
+                  <CardTitle>{ticketTitle}</CardTitle>
                 </CardHeader>
                 {description && <CardContent>{description}</CardContent>}
                 <CardFooter>

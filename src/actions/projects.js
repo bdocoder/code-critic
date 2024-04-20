@@ -73,21 +73,21 @@ export async function setAdminPermission({ userId, projectId, setTo }) {
 export async function removeMember({ userId, projectId }) {
   // for 'deleteMany', see the previous comment
   await prisma.memberProfile.deleteMany({ where: { userId, projectId } });
-  await prisma.issue.updateMany({
+  await prisma.ticket.updateMany({
     where: { AND: [{ assigneeId: userId }, { projectId }] },
     data: { assigneeId: null },
   });
   const project = await prisma.project.findUnique({
     where: { id: projectId },
     include: {
-      issues: {
+      tickets: {
         include: { comments: true },
       },
     },
   });
   const ids = [
     project.id,
-    ...project.issues.reduce((prev, curr) => {
+    ...project.tickets.reduce((prev, curr) => {
       return [...prev, curr.id, ...curr.comments.map((c) => c.id)];
     }, []),
   ];

@@ -56,15 +56,15 @@ export default async function Sidebar() {
       {/* for spacing purposes */}
       <div></div>
 
-      <span className="mt-4 text-sm text-center uppercase">Issues</span>
+      <span className="mt-4 text-sm text-center uppercase">Tickets</span>
 
       <div className="flex flex-col space-y-2">
-        {/* TODO: add the count of open issues */}
+        {/* TODO: add the count of open tickets */}
         <Button className="w-full text-lg" variant="ghost" size="lg" asChild>
-          <Link href="/issues/assigned">Assigned to me</Link>
+          <Link href="/tickets/assigned">Assigned to me</Link>
         </Button>
         <Button className="w-full text-lg" variant="ghost" size="lg" asChild>
-          <Link href="/issues/reported">Reported by me</Link>
+          <Link href="/tickets/reported">Reported by me</Link>
         </Button>
       </div>
     </aside>

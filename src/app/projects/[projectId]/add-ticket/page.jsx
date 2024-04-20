@@ -1,4 +1,4 @@
-import { createIssue } from "@/actions/issues";
+import { createTicket } from "@/actions/tickets";
 import { auth } from "@/auth";
 import ClientForm from "@/components/ClientForm";
 import SubmitButton from "@/components/SubmitButton";
@@ -14,7 +14,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import prisma from "@/db";
 
-export default async function AddIssue({ params: { projectId } }) {
+export default async function AddTicket({ params: { projectId } }) {
   const session = await auth();
   const id = session.user.id;
 
@@ -28,10 +28,10 @@ export default async function AddIssue({ params: { projectId } }) {
   return (
     <Card className="w-full max-w-sm m-auto">
       <CardHeader>
-        <CardTitle>Create an issue</CardTitle>
+        <CardTitle>Create a ticket</CardTitle>
       </CardHeader>
       <CardContent>
-        <ClientForm action={createIssue} className="flex flex-col space-y-2">
+        <ClientForm action={createTicket} className="flex flex-col space-y-2">
           <Input name="title" placeholder="Title" required />
 
           <Textarea

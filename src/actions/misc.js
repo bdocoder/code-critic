@@ -11,7 +11,7 @@ export async function resetDemoData() {
     })
   ).map(({ id }) => id);
   await prisma.comment.deleteMany({ where: { userId: { in: demoIds } } });
-  await prisma.issue.deleteMany({
+  await prisma.ticket.deleteMany({
     where: {
       OR: [{ assigneeId: { in: demoIds } }, { reporterId: { in: demoIds } }],
     },
@@ -56,7 +56,7 @@ export async function resetDemoData() {
     data: {
       title: "This Project",
       description:
-        "A sample project resembling this site and some of its issues.",
+        "A sample project resembling this site and some of its bugs.",
       members: {
         createMany: {
           data: [
@@ -69,8 +69,8 @@ export async function resetDemoData() {
     },
   });
 
-  const [issue1, issue2, issue3, issue4] = await Promise.all([
-    prisma.issue.create({
+  const [ticket1, ticket2, ticket3, ticket4] = await Promise.all([
+    prisma.ticket.create({
       data: {
         title: "Use email & password for authentication",
         description: "GitHub shouldn't be the only way to sign in.",
@@ -81,9 +81,9 @@ export async function resetDemoData() {
       },
     }),
 
-    prisma.issue.create({
+    prisma.ticket.create({
       data: {
-        title: "Fix word wrap in comment and issue tables",
+        title: "Fix word wrap in comment and ticket tables",
         projectId: thisProject.id,
         reporterId: omar.id,
         assigneeId: abdullah.id,
@@ -91,7 +91,7 @@ export async function resetDemoData() {
       },
     }),
 
-    prisma.issue.create({
+    prisma.ticket.create({
       data: {
         title: "Implement destructive variants for dropdowns and toasts",
         description:
@@ -104,7 +104,7 @@ export async function resetDemoData() {
       },
     }),
 
-    prisma.issue.create({
+    prisma.ticket.create({
       data: {
         title: "Fix the text hierarchy (size, spacing, etc) in the sidebar",
         description:
@@ -122,7 +122,7 @@ export async function resetDemoData() {
       userId: hamada.id,
       content: "Consider adding other color variants as well.",
       createdAt: new Date(2024, 3, 4),
-      issueId: issue3.id,
+      ticketId: ticket3.id,
     },
   });
 
@@ -142,32 +142,32 @@ export async function resetDemoData() {
       },
       {
         userId: abdullah.id,
-        type: "issue_assign",
-        resourceId: issue1.id,
+        type: "ticket_assign",
+        resourceId: ticket1.id,
         timestamp: new Date(2024, 3, 4),
       },
       {
         userId: abdullah.id,
-        type: "issue_assign",
-        resourceId: issue2.id,
+        type: "ticket_assign",
+        resourceId: ticket2.id,
         timestamp: new Date(2024, 3, 4),
       },
       {
         userId: abdullah.id,
-        type: "issue_assign",
-        resourceId: issue3.id,
+        type: "ticket_assign",
+        resourceId: ticket3.id,
         timestamp: new Date(2024, 3, 4),
       },
       {
         userId: omar.id,
-        type: "issue_comment",
+        type: "ticket_comment",
         resourceId: comment1.id,
         timestamp: new Date(2024, 3, 4),
       },
       {
         userId: abdullah.id,
-        type: "issue_assign",
-        resourceId: issue4.id,
+        type: "ticket_assign",
+        resourceId: ticket4.id,
         timestamp: new Date(2024, 3, 4),
       },
     ],

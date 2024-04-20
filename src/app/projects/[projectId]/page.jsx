@@ -49,7 +49,7 @@ export default async function ProjectInfo({ params: { projectId } }) {
   const project = await prisma.project.findUnique({
     where: { id: projectId },
     include: {
-      issues: { include: { assignee: true, reporter: true } },
+      tickets: { include: { assignee: true, reporter: true } },
       members: { include: { user: true } },
     },
   });
@@ -64,10 +64,10 @@ export default async function ProjectInfo({ params: { projectId } }) {
       <div className="flex flex-wrap gap-8">
         <Card className="flex-grow">
           <CardHeader>
-            <CardTitle>Issues</CardTitle>
+            <CardTitle>Tickets</CardTitle>
           </CardHeader>
           <CardContent>
-            {project.issues.length ? (
+            {project.tickets.length ? (
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -79,29 +79,31 @@ export default async function ProjectInfo({ params: { projectId } }) {
                 </TableHeader>
 
                 <TableBody>
-                  {project.issues.map(({ id, title, status, dateReported }) => (
-                    <TableRow key={id}>
-                      <TableCell>{title}</TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            status === "open" ? "destructive" : "outline"
-                          }
-                          className="capitalize"
-                        >
-                          {status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{dateReported.toDateString()}</TableCell>
-                      <TableCell>
-                        <Link href={`/projects/${projectId}/${id}`} passHref>
-                          <Button size="icon" variant="ghost">
-                            <ArrowRightIcon />
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {project.tickets.map(
+                    ({ id, title, status, dateReported }) => (
+                      <TableRow key={id}>
+                        <TableCell>{title}</TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={
+                              status === "open" ? "destructive" : "outline"
+                            }
+                            className="capitalize"
+                          >
+                            {status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{dateReported.toDateString()}</TableCell>
+                        <TableCell>
+                          <Link href={`/projects/${projectId}/${id}`} passHref>
+                            <Button size="icon" variant="ghost">
+                              <ArrowRightIcon />
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )}
                 </TableBody>
               </Table>
             ) : (
@@ -110,13 +112,13 @@ export default async function ProjectInfo({ params: { projectId } }) {
           </CardContent>
           <CardFooter>
             <Link
-              href={`/projects/${projectId}/add-issue`}
+              href={`/projects/${projectId}/add-ticket`}
               passHref
               className="self-start"
             >
               <Button>
                 <PlusIcon className="mr-2" />
-                Create an issue
+                Create a ticket
               </Button>
             </Link>
           </CardFooter>

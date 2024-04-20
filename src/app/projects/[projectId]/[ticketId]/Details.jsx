@@ -2,9 +2,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/utils/ui";
 
 /**
- * @param {{issue: import("@prisma/client").Issue & {assignee: import("@prisma/client").User, reporter: import("@prisma/client").User}}} props
+ * @param {{ticket: import("@prisma/client").Ticket & {assignee: import("@prisma/client").User, reporter: import("@prisma/client").User}}} props
  */
-export default function Details({ issue }) {
+export default function Details({ ticket }) {
   return (
     <Card>
       <CardHeader>
@@ -19,24 +19,24 @@ export default function Details({ issue }) {
           )}
         >
           <span>Reporter</span>
-          <span>{issue.reporter.name}</span>
+          <span>{ticket.reporter.name}</span>
           <span>Assignee</span>
-          <span>{issue.assignee?.name || "None"}</span>
+          <span>{ticket.assignee?.name || "None"}</span>
           <span>Created At</span>
           <span>
             {Intl.DateTimeFormat("en", {
               dateStyle: "medium",
               timeStyle: "short",
-            }).format(issue.dateReported)}
+            }).format(ticket.dateReported)}
           </span>
-          {issue.status === "closed" && (
+          {ticket.status === "closed" && (
             <>
               <span>Resolved At</span>
               <span>
                 {Intl.DateTimeFormat("en", {
                   dateStyle: "medium",
                   timeStyle: "short",
-                }).format(issue.dateResolved)}
+                }).format(ticket.dateResolved)}
               </span>
             </>
           )}
