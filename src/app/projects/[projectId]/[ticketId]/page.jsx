@@ -75,7 +75,6 @@ export default async function TicketInfo({ params: { projectId, ticketId } }) {
           className="flex-grow"
           comments={ticket.comments}
           ticketId={ticketId}
-          userId={id}
           projectId={ticket.projectId}
         />
         <Details ticket={ticket} />
