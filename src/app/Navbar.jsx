@@ -6,7 +6,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import LogoutButton from "./LogoutButton";
-import { auth } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Popover,
@@ -14,28 +13,71 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { BellIcon } from "@radix-ui/react-icons";
+import {
+  BellIcon,
+  CaretDownIcon,
+  HamburgerMenuIcon,
+  LockClosedIcon,
+  PlusIcon,
+} from "@radix-ui/react-icons";
 import NotificationsList from "./NotificationsList";
+import NavLink from "@/components/NavLink";
+import { auth } from "@/auth";
 import prisma from "@/db";
 
 export default async function Navbar() {
   const session = await auth();
-
-  const notifications =
-    session?.user?.id &&
-    (await prisma.notification.findMany({
-      where: { userId: session.user.id },
+  const user =
+    session?.user &&
+    (await prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: {
+        profiles: { include: { project: true } },
+        notifications: true,
+      },
     }));
-
-  const hasUnreadNotifications = notifications?.some((n) => !n.read);
+  const hasUnreadNotifications = user?.notifications?.some((n) => !n.read);
 
   return (
-    <header className="flex items-center w-full col-span-2 px-3 py-2 space-x-4 border-b">
+    <header className="flex items-center w-full px-3 py-2 space-x-4 border-b">
       <strong className="font-medium">Code Critic</strong>
       <div style={{ flexGrow: 1 }}></div>
 
-      {session?.user && (
+      {user && (
         <>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" className="hidden md:flex">
+                <CaretDownIcon className="mr-2" />
+                Tickets
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="p-0">
+              {/* TODO: add the count of open tickets */}
+              <NavLink href="/tickets/assigned">Assigned to me</NavLink>
+              <NavLink href="/tickets/reported">Reported by me</NavLink>
+            </PopoverContent>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" className="hidden md:flex">
+                <CaretDownIcon className="mr-2" />
+                Projects
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="p-0">
+              {user.profiles.map(({ project, isAdmin }) => (
+                <NavLink key={project.id} href={`/projects/${project.id}`}>
+                  {isAdmin && <LockClosedIcon className="mr-2" />}
+                  {project.title}
+                </NavLink>
+              ))}
+              <NavLink href="/projects/create">
+                <PlusIcon className="mr-2" />
+                Create
+              </NavLink>
+            </PopoverContent>
+          </Popover>
           <Popover>
             <PopoverTrigger asChild>
               <Button size="icon" variant="outline" className="relative">
@@ -46,16 +88,16 @@ export default async function Navbar() {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0 overflow-auto max-h-80">
-              <NotificationsList notifications={notifications} />
+              <NotificationsList notifications={user.notifications} />
             </PopoverContent>
           </Popover>
 
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
-                <AvatarImage src={session.user.image} />
+                <AvatarImage src={user.image} />
                 <AvatarFallback>
-                  {session.user.name
+                  {user.name
                     .split(" ")
                     .map((word) => word.charAt(0))
                     .join("")}
@@ -63,11 +105,36 @@ export default async function Navbar() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
+              <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <LogoutButton />
             </DropdownMenuContent>
           </DropdownMenu>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button className="md:hidden" size="icon" variant="outline">
+                <HamburgerMenuIcon />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="flex flex-col w-full">
+              <span className="pb-2 text-center opacity-75">Projects</span>
+              {user.profiles.map(({ project, isAdmin }) => (
+                <NavLink key={project.id} href={`/projects/${project.id}`}>
+                  {isAdmin && <LockClosedIcon className="mr-2" />}
+                  {project.title}
+                </NavLink>
+              ))}
+              <NavLink href="/projects/create">
+                <PlusIcon className="mr-2" />
+                Create
+              </NavLink>
+
+              <span className="pt-3 pb-2 text-center opacity-75">Tickets</span>
+              {/* TODO: add the count of open tickets */}
+              <NavLink href="/tickets/assigned">Assigned to me</NavLink>
+              <NavLink href="/tickets/reported">Reported by me</NavLink>
+            </PopoverContent>
+          </Popover>
         </>
       )}
     </header>
