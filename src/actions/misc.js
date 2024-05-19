@@ -69,7 +69,7 @@ export async function resetDemoData() {
     },
   });
 
-  const [ticket1, ticket2, ticket3, ticket4] = await Promise.all([
+  const [ticket1, ticket2, ticket3] = await Promise.all([
     prisma.ticket.create({
       data: {
         title: "Use email & password for authentication",
@@ -97,18 +97,6 @@ export async function resetDemoData() {
         description:
           "These two components shouldn't have the default look" +
           " when implying a dangerous action or an error.",
-        projectId: thisProject.id,
-        reporterId: omar.id,
-        assigneeId: abdullah.id,
-        dateReported: new Date(2024, 3, 4),
-      },
-    }),
-
-    prisma.ticket.create({
-      data: {
-        title: "Fix the text hierarchy (size, spacing, etc) in the sidebar",
-        description:
-          "Users should have an easy way to scan the labels and links.",
         projectId: thisProject.id,
         reporterId: omar.id,
         assigneeId: abdullah.id,
@@ -162,12 +150,6 @@ export async function resetDemoData() {
         userId: omar.id,
         type: "ticket_comment",
         resourceId: comment1.id,
-        timestamp: new Date(2024, 3, 4),
-      },
-      {
-        userId: abdullah.id,
-        type: "ticket_assign",
-        resourceId: ticket4.id,
         timestamp: new Date(2024, 3, 4),
       },
     ],
