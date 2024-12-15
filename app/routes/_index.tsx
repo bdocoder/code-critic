@@ -62,30 +62,24 @@ export default function Index() {
   const data = useLoaderData<typeof loader>();
   const projectMap = useMemo(
     () =>
-      data.profiles.reduce(
-        (acc, curr) => {
-          acc[curr.projectId] = {...curr.project};
-          return acc;
-        },
-        {} as Record<string, Project>,
-      ),
-    [data.profiles],
+      data.profiles.reduce((acc, curr) => {
+        acc[curr.projectId] = {...curr.project};
+        return acc;
+      }, {} as Record<string, Project>),
+    [data.profiles]
   );
   const assignedTickets = useMemo(
     () =>
-      data.profiles.reduce(
-        (acc, curr) => {
-          return [
-            ...acc,
-            ...curr.assignedTickets.map((ticket) => ({
-              ...ticket,
-              project: projectMap[ticket.projectId],
-            })),
-          ];
-        },
-        [] as (Ticket & {project: Project})[],
-      ),
-    [data.profiles, projectMap],
+      data.profiles.reduce((acc, curr) => {
+        return [
+          ...acc,
+          ...curr.assignedTickets.map((ticket) => ({
+            ...ticket,
+            project: projectMap[ticket.projectId],
+          })),
+        ];
+      }, [] as (Ticket & {project: Project})[]),
+    [data.profiles, projectMap]
   );
 
   return (
@@ -99,30 +93,35 @@ export default function Index() {
           </CardHeader>
           <CardContent>
             {data.profiles.length ? (
-              data.profiles.map(({project}) => (
-                <Card key={project.id}>
-                  <CardHeader>
-                    <CardTitle>{project.title}</CardTitle>
-                    <CardDescription>{project.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p>member count: {project._count.members}</p>
-                    <p>
-                      open tickets:{" "}
-                      {
-                        project.tickets.filter(
-                          (ticket) => ticket.status === "open",
-                        ).length
-                      }
-                    </p>
-                  </CardContent>
-                  <CardFooter>
-                    <Link to={`/projects/${project.id}`} className="underline">
-                      Open project
-                    </Link>
-                  </CardFooter>
-                </Card>
-              ))
+              <div className="grid gap-4 xl:grid-cols-2">
+                {data.profiles.map(({project}) => (
+                  <Card key={project.id}>
+                    <CardHeader>
+                      <CardTitle>{project.title}</CardTitle>
+                      <CardDescription>{project.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p>member count: {project._count.members}</p>
+                      <p>
+                        open tickets:{" "}
+                        {
+                          project.tickets.filter(
+                            (ticket) => ticket.status === "open"
+                          ).length
+                        }
+                      </p>
+                    </CardContent>
+                    <CardFooter>
+                      <Link
+                        to={`/projects/${project.id}`}
+                        className="underline"
+                      >
+                        Open project
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
             ) : (
               <p className="text-lg m-auto whitespace-break-spaces">
                 You can create a project using the + button in the sidebar
@@ -184,8 +183,8 @@ export function ErrorBoundary() {
       {isRouteErrorResponse(error)
         ? `${error.status} ${error.statusText}`
         : error instanceof Error
-          ? error.message
-          : "Unknown Error"}
+        ? error.message
+        : "Unknown Error"}
     </h1>
   );
 }
