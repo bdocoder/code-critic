@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,87 +14,101 @@ datasource db {
 }
 
 model User {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  email       String  @unique
-  githubId    Int?    @unique
-  password    String?
-  image       String?
-  demoAccount Boolean @default(false)
+  id            String   @id @map("_id")
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
 
-  profiles        MemberProfile[] @relation("member")
-  tickets         Ticket[]        @relation("ticket_reporter")
-  assignedTickets Ticket[]        @relation("ticket_assignee")
-  comments        Comment[]       @relation("comment")
-  notifications   Notification[]  @relation("notification")
+  sessions Session[]
+  accounts Account[]
+
+  profiles MemberProfile[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @map("_id")
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model Account {
+  id           String    @id @map("_id")
+  accountId    String
+  providerId   String
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken  String?
+  refreshToken String?
+  idToken      String?
+  expiresAt    DateTime?
+  password     String?
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @map("_id")
+  identifier String
+  value      String
+  expiresAt  DateTime
+
+  @@map("verification")
 }
 
 model Project {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String?
+  isArchived  Boolean @default(false)
 
-  members MemberProfile[] @relation("member")
-  tickets Ticket[]        @relation("ticket")
+  members MemberProfile[]
+  tickets Ticket[]
 }
 
 model MemberProfile {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String  @db.ObjectId
-  projectId String  @db.ObjectId
-  role      String?
-  isAdmin   Boolean @default(false)
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  isAdmin  Boolean @default(false)
+  isActive Boolean @default(true)
 
-  user    User    @relation("member", fields: [userId], references: [id])
-  project Project @relation("member", fields: [projectId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  projectId String  @db.ObjectId
+  project   Project @relation(fields: [projectId], references: [id])
+
+  tickets         Ticket[] @relation("reporter")
+  assignedTickets Ticket[] @relation("assignee")
 }
 
 model Ticket {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  title        String
-  description  String?
-  status       TicketStatus @default(open)
-  dateReported DateTime     @default(now())
-  dateResolved DateTime?
-  reporterId   String       @db.ObjectId
-  assigneeId   String?      @db.ObjectId
-  projectId    String       @db.ObjectId
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  reportDate  DateTime     @default(now())
+  status      TicketStatus @default(open)
 
-  reporter User      @relation("ticket_reporter", fields: [reporterId], references: [id])
-  assignee User?     @relation("ticket_assignee", fields: [assigneeId], references: [id])
-  project  Project   @relation("ticket", fields: [projectId], references: [id])
-  comments Comment[] @relation("comment")
-}
+  reporterId String        @db.ObjectId
+  reporter   MemberProfile @relation("reporter", fields: [reporterId], references: [id])
 
-model Comment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  content   String
-  userId    String   @db.ObjectId
-  ticketId  String   @db.ObjectId
+  assigneeId String?        @db.ObjectId
+  assignee   MemberProfile? @relation("assignee", fields: [assigneeId], references: [id])
 
-  user   User   @relation("comment", fields: [userId], references: [id])
-  ticket Ticket @relation("comment", fields: [ticketId], references: [id])
-}
-
-model Notification {
-  id         String           @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String           @db.ObjectId
-  type       NotificationType
-  resourceId String?          @db.ObjectId
-  read       Boolean          @default(false)
-  timestamp  DateTime         @default(now())
-
-  user User @relation("notification", fields: [userId], references: [id])
+  projectId String  @db.ObjectId
+  project   Project @relation(fields: [projectId], references: [id])
 }
 
 enum TicketStatus {
   open
   closed
-}
-
-enum NotificationType {
-  project_add
-  ticket_assign
-  ticket_comment
 }

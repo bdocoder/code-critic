@@ -1,4 +1,4 @@
-This is a simple bug tracker app, made with NextJS & Shadcn UI.
+This is a simple ticket tracker app, made with Remix & Shadcn UI.
 
 ## Getting Started
 
@@ -8,7 +8,4 @@ First, run the development server:
 npm run dev # or equivalent in other package managers
 ```
 
-Then, open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can authenticate with GitHub or login
-with a demo account to see how the app works with pre-generated data.
+Then, open [http://localhost:3000](http://localhost:3000) with your browser to view the app.
