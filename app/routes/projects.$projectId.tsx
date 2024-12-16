@@ -6,12 +6,10 @@ import type {
 } from "@remix-run/node";
 import {
   Form,
-  isRouteErrorResponse,
   useActionData,
   useLoaderData,
   useNavigate,
   useNavigation,
-  useRouteError,
 } from "@remix-run/react";
 import {
   ArchiveIcon,
@@ -68,11 +66,12 @@ import UserAvatar from "~/components/user-avatar";
 import {getUser} from "~/lib/auth.server";
 import prisma from "~/lib/prisma.server";
 import {cn} from "~/lib/ui/utils";
+import {error} from "~/lib/utils.server";
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [
-    {title: data?.project.title},
-    {name: "description", content: data?.project.description},
+    {title: data?.project?.title},
+    {name: "description", content: data?.project?.description},
   ];
 };
 
@@ -81,9 +80,9 @@ export async function loader({
   params: {projectId},
 }: LoaderFunctionArgs) {
   invariant(projectId);
-  const [user, project] = await Promise.all([
-    getUser(request),
-    prisma.project.findUnique({
+  const user = await getUser(request);
+  try {
+    const project = await prisma.project.findUnique({
       where: {id: projectId},
       include: {
         members: {include: {user: true}},
@@ -91,20 +90,16 @@ export async function loader({
           orderBy: [{status: "desc"}, {reportDate: "desc"}],
         },
       },
-    }),
-  ]);
-  if (!project)
-    throw new Response(null, {
-      status: 404,
-      statusText: "This project doesn't exist!",
     });
-  const profile = project.members.find((member) => member.userId === user.id);
-  if (!profile || !profile.isActive)
-    throw new Response(null, {
-      status: 403,
-      statusText: "You aren't a member of this project!",
-    });
-  return {user, project};
+
+    if (!project) error("This project doesn't exist!");
+    const profile = project.members.find((member) => member.userId === user.id);
+    if (!profile || !profile.isActive)
+      error("You aren't a member of this project!");
+    return {user, project};
+  } catch {
+    error("Something went wrong!");
+  }
 }
 
 export default function Project() {
@@ -120,15 +115,12 @@ export default function Project() {
   const {state} = useNavigation();
   const thisProfile = useMemo(
     () => project.members.find((member) => member.userId === user.id),
-    [project.members, user.id],
+    [project.members, user.id]
   );
-  const membersMap = project.members.reduce(
-    (acc, curr) => {
-      acc[curr.id] = curr;
-      return acc;
-    },
-    {} as Record<string, MemberProfile & {user: User}>,
-  );
+  const membersMap = project.members.reduce((acc, curr) => {
+    acc[curr.id] = curr;
+    return acc;
+  }, {} as Record<string, MemberProfile & {user: User}>);
 
   invariant(thisProfile);
   const pending = state !== "idle";
@@ -236,7 +228,7 @@ export default function Project() {
               <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 items-start">
                 {project.tickets
                   .filter(
-                    (ticket) => showClosedTickets || ticket.status === "open",
+                    (ticket) => showClosedTickets || ticket.status === "open"
                   )
                   .map((ticket) => (
                     <Card
@@ -247,7 +239,7 @@ export default function Project() {
                       <CardHeader>
                         <CardTitle
                           className={cn(
-                            !ticket.title && "text-muted-foreground",
+                            !ticket.title && "text-muted-foreground"
                           )}
                         >
                           {ticket.title || "<NO TITLE>"}
@@ -268,7 +260,7 @@ export default function Project() {
                             "py-1 px-3 rounded-full",
                             ticket.status === "open"
                               ? "bg-primary text-primary-foreground"
-                              : "bg-secondary",
+                              : "bg-secondary"
                           )}
                         >
                           {ticket.status}
@@ -357,7 +349,7 @@ export default function Project() {
                 <span
                   className={cn(
                     "flex-grow font-medium",
-                    !member.isActive && "text-muted-foreground/50",
+                    !member.isActive && "text-muted-foreground/50"
                   )}
                 >
                   {member.user.name} {member.user.id === user.id && "(You)"}
@@ -699,17 +691,4 @@ export async function action({request, params}: ActionFunctionArgs) {
   }
 
   return null;
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-  return (
-    <h1>
-      {isRouteErrorResponse(error)
-        ? `${error.status} ${error.statusText}`
-        : error instanceof Error
-          ? error.message
-          : "Unknown Error"}
-    </h1>
-  );
 }

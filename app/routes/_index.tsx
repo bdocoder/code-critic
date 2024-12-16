@@ -1,11 +1,6 @@
 import type {Project, Ticket} from "@prisma/client";
 import type {LoaderFunctionArgs, MetaFunction} from "@remix-run/node";
-import {
-  isRouteErrorResponse,
-  Link,
-  useLoaderData,
-  useRouteError,
-} from "@remix-run/react";
+import {Link, useLoaderData} from "@remix-run/react";
 import {useMemo} from "react";
 import {
   Card,
@@ -28,34 +23,26 @@ export const meta: MetaFunction = () => [
 ];
 
 export async function loader({request}: LoaderFunctionArgs) {
-  try {
-    const user = await getUser(request);
-    const profiles = await prisma.memberProfile.findMany({
-      where: {
-        userId: user.id,
-      },
-      include: {
-        project: {
-          include: {
-            _count: {select: {members: true}},
-            tickets: true,
-          },
-        },
-        assignedTickets: {
-          where: {
-            status: "open",
-          },
+  const user = await getUser(request);
+  const profiles = await prisma.memberProfile.findMany({
+    where: {
+      userId: user.id,
+    },
+    include: {
+      project: {
+        include: {
+          _count: {select: {members: true}},
+          tickets: true,
         },
       },
-    });
-    return {user, profiles};
-  } catch (e) {
-    console.error(e);
-    throw new Response(null, {
-      status: 500,
-      statusText: "Something went wrong!",
-    });
-  }
+      assignedTickets: {
+        where: {
+          status: "open",
+        },
+      },
+    },
+  });
+  return {user, profiles};
 }
 
 export default function Index() {
@@ -173,18 +160,5 @@ export default function Index() {
         </Card>
       </div>
     </div>
-  );
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-  return (
-    <h1 className="m-auto">
-      {isRouteErrorResponse(error)
-        ? `${error.status} ${error.statusText}`
-        : error instanceof Error
-        ? error.message
-        : "Unknown Error"}
-    </h1>
   );
 }
