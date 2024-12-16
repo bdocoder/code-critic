@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import {SidebarTrigger} from "~/components/ui/sidebar";
 import {getUser} from "~/lib/auth.server";
 import prisma from "~/lib/prisma.server";
 
@@ -71,7 +72,10 @@ export default function Index() {
 
   return (
     <div className="my-auto">
-      <h1 className="text-3xl mb-12 text-center">Hello, {data.user.name}</h1>
+      <div className="flex justify-center items-center gap-2 mb-12">
+        <SidebarTrigger className="md:hidden" />
+        <h1 className="text-3xl">Hello, {data.user.name}</h1>
+      </div>
       <div className="grid items-start gap-4 lg:grid-cols-2 xl:grid-cols-3">
         <Card className="bg-secondary lg:order-2">
           <CardHeader>
