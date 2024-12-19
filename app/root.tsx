@@ -262,9 +262,7 @@ export default function App() {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() =>
-                        authClient
-                          .signOut()
-                          .then(() => navigate("/auth/sign-in"))
+                        authClient.signOut().then(() => navigate("/auth"))
                       }
                     >
                       <LogOutIcon />

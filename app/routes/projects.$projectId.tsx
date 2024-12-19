@@ -115,12 +115,15 @@ export default function Project() {
   const {state} = useNavigation();
   const thisProfile = useMemo(
     () => project.members.find((member) => member.userId === user.id),
-    [project.members, user.id]
+    [project.members, user.id],
   );
-  const membersMap = project.members.reduce((acc, curr) => {
-    acc[curr.id] = curr;
-    return acc;
-  }, {} as Record<string, MemberProfile & {user: User}>);
+  const membersMap = project.members.reduce(
+    (acc, curr) => {
+      acc[curr.id] = curr;
+      return acc;
+    },
+    {} as Record<string, MemberProfile & {user: User}>,
+  );
 
   invariant(thisProfile);
   const pending = state !== "idle";
@@ -228,7 +231,7 @@ export default function Project() {
               <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 items-start">
                 {project.tickets
                   .filter(
-                    (ticket) => showClosedTickets || ticket.status === "open"
+                    (ticket) => showClosedTickets || ticket.status === "open",
                   )
                   .map((ticket) => (
                     <Card
@@ -239,7 +242,7 @@ export default function Project() {
                       <CardHeader>
                         <CardTitle
                           className={cn(
-                            !ticket.title && "text-muted-foreground"
+                            !ticket.title && "text-muted-foreground",
                           )}
                         >
                           {ticket.title || "<NO TITLE>"}
@@ -260,7 +263,7 @@ export default function Project() {
                             "py-1 px-3 rounded-full",
                             ticket.status === "open"
                               ? "bg-primary text-primary-foreground"
-                              : "bg-secondary"
+                              : "bg-secondary",
                           )}
                         >
                           {ticket.status}
@@ -349,7 +352,7 @@ export default function Project() {
                 <span
                   className={cn(
                     "flex-grow font-medium",
-                    !member.isActive && "text-muted-foreground/50"
+                    !member.isActive && "text-muted-foreground/50",
                   )}
                 >
                   {member.user.name} {member.user.id === user.id && "(You)"}

@@ -19,6 +19,6 @@ export const auth = betterAuth({
 
 export async function getUser(request: Request) {
   const session = await auth.api.getSession({headers: request.headers});
-  if (!session) throw redirect("/auth/sign-in");
+  if (!session) throw redirect("/auth");
   return session.user;
 }

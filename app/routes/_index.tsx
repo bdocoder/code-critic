@@ -50,24 +50,30 @@ export default function Index() {
   const data = useLoaderData<typeof loader>();
   const projectMap = useMemo(
     () =>
-      data.profiles.reduce((acc, curr) => {
-        acc[curr.projectId] = {...curr.project};
-        return acc;
-      }, {} as Record<string, Project>),
-    [data.profiles]
+      data.profiles.reduce(
+        (acc, curr) => {
+          acc[curr.projectId] = {...curr.project};
+          return acc;
+        },
+        {} as Record<string, Project>,
+      ),
+    [data.profiles],
   );
   const assignedTickets = useMemo(
     () =>
-      data.profiles.reduce((acc, curr) => {
-        return [
-          ...acc,
-          ...curr.assignedTickets.map((ticket) => ({
-            ...ticket,
-            project: projectMap[ticket.projectId],
-          })),
-        ];
-      }, [] as (Ticket & {project: Project})[]),
-    [data.profiles, projectMap]
+      data.profiles.reduce(
+        (acc, curr) => {
+          return [
+            ...acc,
+            ...curr.assignedTickets.map((ticket) => ({
+              ...ticket,
+              project: projectMap[ticket.projectId],
+            })),
+          ];
+        },
+        [] as (Ticket & {project: Project})[],
+      ),
+    [data.profiles, projectMap],
   );
 
   return (
@@ -97,7 +103,7 @@ export default function Index() {
                         open tickets:{" "}
                         {
                           project.tickets.filter(
-                            (ticket) => ticket.status === "open"
+                            (ticket) => ticket.status === "open",
                           ).length
                         }
                       </p>
